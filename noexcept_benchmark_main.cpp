@@ -28,6 +28,25 @@ namespace unspecified_exception_specification_test
 
 int main()
 {
+  std::cout
+    << "__FILE__ = " << __FILE__
+    << "\nsizeof(void*) = " << sizeof(void*)
+#ifdef _MSC_FULL_VER
+    << "\n_MSC_FULL_VER = "
+    << _MSC_FULL_VER
+#endif
+#ifdef _MSC_BUILD
+    << "\n_MSC_BUILD = "
+    << _MSC_BUILD
+#endif
+#ifdef _DEBUG
+    << "\n_DEBUG"
+#endif
+#ifdef NDEBUG
+    << "\nNDEBUG (\"Not Debug\")"
+#endif
+    << std::endl;
+
   for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {
     noexcept_test::test_inline_func();
