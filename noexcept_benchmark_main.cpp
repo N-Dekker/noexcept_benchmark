@@ -32,6 +32,10 @@ int main()
   std::cout
     << "__FILE__ = " << __FILE__
     << "\nsizeof(void*) = " << sizeof(void*)
+#ifdef __VERSION__
+    << "\n__VERSION__ = "
+    __VERSION__
+#endif
 #ifdef _MSC_FULL_VER
     << "\n_MSC_FULL_VER = "
     << _MSC_FULL_VER
@@ -48,7 +52,10 @@ int main()
 #endif
     << std::endl;
 
-  std::cout << "[test_inline_func]" << std::endl;
+  std::cout << "[test_inline_func (N = "
+    << NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
+    << ")]"
+    << std::endl;
 
   for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {

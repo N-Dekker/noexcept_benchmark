@@ -18,11 +18,18 @@ limitations under the License.
 */
 
 #ifdef _WIN32
-  #define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT __declspec(dllimport)
-  #define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT __declspec(dllexport)
+#  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT __declspec(dllimport)
+#  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT __declspec(dllexport)
 #else
-  #define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT
-  #define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+#  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT
+#  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+#endif
+
+// TODO Make this number configurable.
+#ifdef NDEBUG
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 167890002
+#else
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 16789001
 #endif
 
 #endif

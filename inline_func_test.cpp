@@ -60,7 +60,7 @@ namespace LIBRARY_NAMESPACE
     using namespace std::chrono;
     const auto time_before_func_calls = high_resolution_clock::now();
 
-    constexpr int number_of_func_calls = 1678900000;
+    constexpr int number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS;
 
     for (int i = 0; i < number_of_func_calls; ++i)
     {
