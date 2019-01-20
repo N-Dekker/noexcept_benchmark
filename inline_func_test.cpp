@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include "noexcept_benchmark.h"
+
 #include <cassert>
 #include <chrono>
 #include <iostream>
@@ -53,7 +55,7 @@ namespace
 
 namespace LIBRARY_NAMESPACE
 {
-  __declspec(dllexport) void test_inline_func()
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void test_inline_func()
   {
     using namespace std::chrono;
     const auto time_before_func_calls = high_resolution_clock::now();

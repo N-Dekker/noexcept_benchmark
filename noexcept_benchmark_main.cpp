@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include "noexcept_benchmark.h"
 #include <iostream>
 
 namespace noexcept_test
 {
-  __declspec(dllimport) void test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
 }
 
 namespace unspecified_exception_specification_test
 {
-  __declspec(dllimport) void test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
 }
 
 int main()
