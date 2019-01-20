@@ -35,6 +35,8 @@ if (CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 set(SHARED_LIB_SOURCE_FILES
   exported_func.cpp
   inline_func_test.cpp
