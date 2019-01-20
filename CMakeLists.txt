@@ -23,6 +23,10 @@ cmake_minimum_required( VERSION 3.9.2 )
 
 project (noexcept_benchmark)
 
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 11)
+endif()
+
 add_library(noexcept_lib SHARED
   inline_func_test.cpp)
 target_compile_definitions(noexcept_lib PRIVATE SPECIFY_NOEXCEPT=1)
