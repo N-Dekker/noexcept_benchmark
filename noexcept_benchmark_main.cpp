@@ -53,6 +53,4 @@ int main()
     noexcept_test::test_inline_func();
     unspecified_exception_specification_test::test_inline_func();
   }
-  std::cout << "Press any key to exit!" << std::endl;
-  std::cin.get();
 }
