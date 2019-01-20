@@ -17,8 +17,6 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 
 #include <cassert>
-#include <chrono>
-#include <iostream>
 #include <exception>
 
 namespace
@@ -30,35 +28,14 @@ namespace
       throw std::exception{};
     }
   }
-
-
-  inline void inline_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
-  {
-    assert(!do_throw_exception);
-    throw_if_true(do_throw_exception);
-  }
 }
 
 
 namespace LIBRARY_NAMESPACE
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void test_inline_func()
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void exported_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
-    using namespace std::chrono;
-    const auto time_before_func_calls = high_resolution_clock::now();
-
-    constexpr int number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS;
-
-    for (int i = 0; i < number_of_func_calls; ++i)
-    {
-      inline_func(false);
-    }
-
-    const auto time_after_func_calls = high_resolution_clock::now();
-
-    const auto durationSeconds =
-      duration_cast<duration<double>>(time_after_func_calls - time_before_func_calls);
-
-    std::cout << testName << ":\n\tDuration = " << durationSeconds.count() << " second(s)" << std::endl;
+    assert(!do_throw_exception);
+    throw_if_true(do_throw_exception);
   }
 }

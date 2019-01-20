@@ -25,11 +25,25 @@ limitations under the License.
 #  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
 #endif
 
-// TODO Make this number configurable.
+#if SPECIFY_NOEXCEPT == 0
+#define OPTIONAL_EXCEPTION_SPECIFIER
+#define LIBRARY_NAMESPACE unspecified_exception_specification_test
+const char* const testName = "unspecified-except-spec-test";
+#endif
+#if SPECIFY_NOEXCEPT == 1
+#define OPTIONAL_EXCEPTION_SPECIFIER noexcept
+#define LIBRARY_NAMESPACE noexcept_test
+const char* const testName = "noexcept-test";
+#endif
+
+
+// TODO Make these numbers configurable.
 #ifdef NDEBUG
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 167890002
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 690000002
 #else
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 16789001
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 69000001
 #endif
 
 #endif

@@ -27,12 +27,17 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 11)
 endif()
 
-add_library(noexcept_lib SHARED
-  inline_func_test.cpp)
+set(SHARED_LIB_SOURCE_FILES
+  exported_func.cpp
+  inline_func_test.cpp
+)
+
+add_library(noexcept_lib
+  SHARED ${SHARED_LIB_SOURCE_FILES})
 target_compile_definitions(noexcept_lib PRIVATE SPECIFY_NOEXCEPT=1)
 
-add_library(unspecified_except_lib SHARED
-  inline_func_test.cpp)
+add_library(unspecified_except_lib
+  SHARED ${SHARED_LIB_SOURCE_FILES})
 target_compile_definitions(unspecified_except_lib PRIVATE SPECIFY_NOEXCEPT=0)
 
 
