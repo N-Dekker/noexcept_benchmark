@@ -72,6 +72,6 @@ namespace LIBRARY_NAMESPACE
     const auto durationSeconds =
       duration_cast<duration<double>>(time_after_func_calls - time_before_func_calls);
 
-    std::cout << " Duration " << testName << ": \t" << durationSeconds.count() << " second(s)" << std::endl;
+    std::cout << testName << ":\n\tDuration = " << durationSeconds.count() << " second(s)" << std::endl;
   }
 }

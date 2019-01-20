@@ -48,6 +48,8 @@ int main()
 #endif
     << std::endl;
 
+  std::cout << "[test_inline_func]" << std::endl;
+
   for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {
     noexcept_test::test_inline_func();
