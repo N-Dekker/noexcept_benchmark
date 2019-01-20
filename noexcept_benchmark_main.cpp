@@ -22,12 +22,14 @@ namespace noexcept_test
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception) noexcept;
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
 }
 
 namespace unspecified_exception_specification_test
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
 }
 
 int main()
@@ -102,4 +104,17 @@ int main()
         << std::endl;
     }
   }
+  std::cout << "\n[test_vector_reserve (N = "
+    << NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
+    << ")]"
+    << std::endl;
+
+  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
+  {
+    std::cout << "noexcept-test:\n" << std::flush;
+    noexcept_test::test_vector_reserve();
+    std::cout << "unspecified-except-spec-test:\n" << std::flush;
+    unspecified_exception_specification_test::test_vector_reserve();
+  }
+
 }

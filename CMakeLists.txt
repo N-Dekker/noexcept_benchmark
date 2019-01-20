@@ -40,6 +40,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(SHARED_LIB_SOURCE_FILES
   exported_func.cpp
   inline_func_test.cpp
+  vector_reserve_test.cpp
 )
 
 add_library(noexcept_lib
