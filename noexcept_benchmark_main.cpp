@@ -68,39 +68,37 @@ int main()
     noexcept_test::test_inline_func();
     unspecified_exception_specification_test::test_inline_func();
   }
+  std::cout << "\n[exported_func(false) calls (N = "
+    << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
+    << ")]"
+    << std::endl;
+
+  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {
-    std::cout << "\n[exported_func(false) calls (N = "
-      << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
-      << ")]"
-      << std::endl;
+    const int numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS;
 
-    for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
+    const auto time_point1 = std::chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < numberOfFuncCalls; ++i)
     {
-      const auto time_point1 = std::chrono::high_resolution_clock::now();
-
-      const int numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS;
-
-      for (int i = 0; i < numberOfFuncCalls; ++i)
-      {
-        noexcept_test::exported_func(false);
-      }
-
-      const auto time_point2 = std::chrono::high_resolution_clock::now();
-
-      for (int i = 0; i < numberOfFuncCalls; ++i)
-      {
-        unspecified_exception_specification_test::exported_func(false);
-      }
-
-      const auto time_point3 = std::chrono::high_resolution_clock::now();
-
-      std::cout
-        << "noexcept-test:\n"
-        << noexcept_benchmark::make_duration_string(time_point1, time_point2)
-        << "unspecified-except-spec-test:\n"
-        << noexcept_benchmark::make_duration_string(time_point2, time_point3)
-        << std::flush;
+      noexcept_test::exported_func(false);
     }
+
+    const auto time_point2 = std::chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < numberOfFuncCalls; ++i)
+    {
+      unspecified_exception_specification_test::exported_func(false);
+    }
+
+    const auto time_point3 = std::chrono::high_resolution_clock::now();
+
+    std::cout
+      << "noexcept-test:\n"
+      << noexcept_benchmark::make_duration_string(time_point1, time_point2)
+      << "unspecified-except-spec-test:\n"
+      << noexcept_benchmark::make_duration_string(time_point2, time_point3)
+      << std::flush;
   }
   std::cout << "\n[test_vector_reserve (N = "
     << NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
