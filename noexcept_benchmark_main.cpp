@@ -32,6 +32,7 @@ namespace unspecified_exception_specification_test
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
 }
 
+
 int main()
 {
   std::cout
@@ -75,8 +76,7 @@ int main()
 
     for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
     {
-      using namespace std::chrono;
-      const auto timePoint1 = high_resolution_clock::now();
+      const auto time_point1 = std::chrono::high_resolution_clock::now();
 
       const int numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS;
 
@@ -85,23 +85,21 @@ int main()
         noexcept_test::exported_func(false);
       }
 
-      const auto timePoint2 = high_resolution_clock::now();
+      const auto time_point2 = std::chrono::high_resolution_clock::now();
 
       for (int i = 0; i < numberOfFuncCalls; ++i)
       {
         unspecified_exception_specification_test::exported_func(false);
       }
 
-      const auto timePoint3 = high_resolution_clock::now();
+      const auto time_point3 = std::chrono::high_resolution_clock::now();
 
-      const auto durationNoexceptFunc =
-        duration_cast<duration<double>>(timePoint2 - timePoint1);
-      const auto durationUnspecifiedFunc =
-        duration_cast<duration<double>>(timePoint3 - timePoint2);
-      std::cout <<
-        "noexcept-test:\n\tDuration = " << durationNoexceptFunc.count() << " second(s)\n"
-        "unspecified-except-spec-test:\n\tDuration = " << durationUnspecifiedFunc.count() << " second(s)"
-        << std::endl;
+      std::cout
+        << "noexcept-test:\n"
+        << noexcept_benchmark::make_duration_string(time_point1, time_point2)
+        << "unspecified-except-spec-test:\n"
+        << noexcept_benchmark::make_duration_string(time_point2, time_point3)
+        << std::flush;
     }
   }
   std::cout << "\n[test_vector_reserve (N = "

@@ -17,6 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <chrono>
+#include <string>
+
+
 #ifdef _WIN32
 #  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT __declspec(dllimport)
 #  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT __declspec(dllexport)
@@ -47,5 +51,17 @@ const char* const testName = "noexcept-test";
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 69000001
 #  define NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE 750001
 #endif
+
+namespace noexcept_benchmark
+{
+  inline std::string make_duration_string(
+    const std::chrono::high_resolution_clock::time_point time_point1,
+    const std::chrono::high_resolution_clock::time_point time_point2)
+  {
+    const auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(time_point2 - time_point1);
+    return "\tDuration = " + std::to_string(duration.count()) + " second(s)\n";
+  }
+}
+
 
 #endif

@@ -83,16 +83,12 @@ namespace LIBRARY_NAMESPACE
   {
     std::vector<my_string> strings(NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE, my_string(1));
 
-    using namespace std::chrono;
-    const auto time_before_func_calls = high_resolution_clock::now();
+    const auto time_point1 = std::chrono::high_resolution_clock::now();
 
     strings.reserve(strings.capacity() + 1);
 
-    const auto time_after_func_calls = high_resolution_clock::now();
+    const auto time_point2 = std::chrono::high_resolution_clock::now();
 
-    const auto durationSeconds =
-      duration_cast<duration<double>>(time_after_func_calls - time_before_func_calls);
-
-    std::cout << "\tDuration = " << durationSeconds.count() << " second(s)" << std::endl;
+    std::cout << noexcept_benchmark::make_duration_string(time_point1, time_point2) << std::flush;
   }
 }
