@@ -12,4 +12,7 @@ pool:
 steps:
   - script: |
       mkdir build && cd build && cmake ..
-  - script: MSBuild.exe && ..\build\noexcept_benchmark.exe
+  - script: |
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+      MSBuild.exe
+      ..\build\noexcept_benchmark.exe
