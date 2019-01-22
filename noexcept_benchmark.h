@@ -54,11 +54,14 @@ const char* const testName = "noexcept-test";
 
 namespace noexcept_benchmark
 {
-  inline std::string make_duration_string(
-    const std::chrono::high_resolution_clock::time_point time_point1,
-    const std::chrono::high_resolution_clock::time_point time_point2)
+  template <typename T>
+  std::string profile_func_call(T func)
   {
-    const auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(time_point2 - time_point1);
+    using namespace std::chrono;
+    const auto time_point1 = high_resolution_clock::now();
+    func();
+    const auto time_point2 = high_resolution_clock::now();
+    const auto duration = duration_cast<std::chrono::duration<double>>(time_point2 - time_point1);
     return "\tDuration = " + std::to_string(duration.count()) + " second(s)\n";
   }
 }

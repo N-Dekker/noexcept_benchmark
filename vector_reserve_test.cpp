@@ -83,12 +83,11 @@ namespace LIBRARY_NAMESPACE
   {
     std::vector<my_string> strings(NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE, my_string(1));
 
-    const auto time_point1 = std::chrono::high_resolution_clock::now();
-
-    strings.reserve(strings.capacity() + 1);
-
-    const auto time_point2 = std::chrono::high_resolution_clock::now();
-
-    std::cout << noexcept_benchmark::make_duration_string(time_point1, time_point2) << std::flush;
+    std::cout
+      << noexcept_benchmark::profile_func_call([&strings]
+    {
+      strings.reserve(strings.capacity() + 1);
+    })
+      << std::flush;
   }
 }

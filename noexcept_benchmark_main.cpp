@@ -75,29 +75,25 @@ int main()
 
   for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {
-    const int numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS;
-
-    const auto time_point1 = std::chrono::high_resolution_clock::now();
-
-    for (int i = 0; i < numberOfFuncCalls; ++i)
-    {
-      noexcept_test::exported_func(false);
-    }
-
-    const auto time_point2 = std::chrono::high_resolution_clock::now();
-
-    for (int i = 0; i < numberOfFuncCalls; ++i)
-    {
-      unspecified_exception_specification_test::exported_func(false);
-    }
-
-    const auto time_point3 = std::chrono::high_resolution_clock::now();
+    enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
 
     std::cout
       << "noexcept-test:\n"
-      << noexcept_benchmark::make_duration_string(time_point1, time_point2)
+      << noexcept_benchmark::profile_func_call([]
+    {
+      for (int i = 0; i < numberOfFuncCalls; ++i)
+      {
+        noexcept_test::exported_func(false);
+      }
+    })
       << "unspecified-except-spec-test:\n"
-      << noexcept_benchmark::make_duration_string(time_point2, time_point3)
+      << noexcept_benchmark::profile_func_call([]
+    {
+      for (int i = 0; i < numberOfFuncCalls; ++i)
+      {
+        unspecified_exception_specification_test::exported_func(false);
+      }
+    })
       << std::flush;
   }
   std::cout << "\n[test_vector_reserve (N = "

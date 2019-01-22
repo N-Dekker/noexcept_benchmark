@@ -44,17 +44,18 @@ namespace LIBRARY_NAMESPACE
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void test_inline_func()
   {
-    const int number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS;
+    enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
 
-    const auto time_point1 = std::chrono::high_resolution_clock::now();
-
-    for (int i = 0; i < number_of_func_calls; ++i)
+    std::cout
+      << testName
+      << ":\n"
+      << noexcept_benchmark::profile_func_call([]
     {
-      inline_func(false);
-    }
-
-    const auto time_point2 = std::chrono::high_resolution_clock::now();
-
-    std::cout << testName << ":\n" << noexcept_benchmark::make_duration_string(time_point1, time_point2) << std::flush;
+      for (int i = 0; i < number_of_func_calls; ++i)
+      {
+        inline_func(false);
+      }
+    })
+      << std::flush;
   }
 }
