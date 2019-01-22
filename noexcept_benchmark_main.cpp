@@ -179,7 +179,7 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[test_inline_func (N = "
+    std::cout << "\n[inline function calls (N = "
       << NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
       << ")]"
       << std::endl;
@@ -197,7 +197,7 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[recursive_func (N = "
+    std::cout << "\n[recursive function calls (N = "
       << NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS
       << ")]"
       << std::endl;
@@ -225,7 +225,7 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[exported_func(false) calls (N = "
+    std::cout << "\n[exported library function calls (N = "
       << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
       << ")]"
       << std::endl;
@@ -257,7 +257,7 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[test_vector_reserve (N = "
+    std::cout << "\n[std::vector reserve (N = "
       << NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
       << ")]"
       << std::endl;
