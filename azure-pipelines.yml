@@ -3,7 +3,16 @@ pool:
 
 steps:
   - script: |
+      mkdir build32
+      cd build32
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+      cmake .. -G "Visual Studio 15 2017"
+      MSBuild.exe ..\build32\noexcept_benchmark.sln  /p:Platform="Win32"
+      ..\build32\Release\noexcept_benchmark.exe
+      cd ..
+      mkdir build64
+      cd build64
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-      cmake . -G "Visual Studio 15 2017 Win64"
-      MSBuild.exe noexcept_benchmark.sln
-      Release\noexcept_benchmark.exe
+      cmake .. -G "Visual Studio 15 2017 Win64"
+      MSBuild.exe ..\build64\noexcept_benchmark.sln
+      ..\build64\Release\noexcept_benchmark.exe
