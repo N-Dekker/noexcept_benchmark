@@ -46,9 +46,9 @@ add_library(noexcept_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
 target_compile_definitions(noexcept_lib PRIVATE SPECIFY_NOEXCEPT=1)
 
-add_library(unspecified_except_lib
+add_library(implicit_except_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
-target_compile_definitions(unspecified_except_lib PRIVATE SPECIFY_NOEXCEPT=0)
+target_compile_definitions(implicit_except_lib PRIVATE SPECIFY_NOEXCEPT=0)
 
 
 add_executable(${PROJECT_NAME}
@@ -56,5 +56,5 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
 	noexcept_lib
-	unspecified_except_lib
+	implicit_except_lib
 	)

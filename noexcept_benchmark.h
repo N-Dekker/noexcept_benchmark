@@ -30,13 +30,11 @@ limitations under the License.
 #ifdef SPECIFY_NOEXCEPT
 #  if SPECIFY_NOEXCEPT == 0
 #    define OPTIONAL_EXCEPTION_SPECIFIER
-#    define LIBRARY_NAMESPACE unspecified_exception_specification_test
-const char* const testName = "unspecified-except-spec-test";
+#    define LIBRARY_NAMESPACE implicit_except_test
 #  endif
 #  if SPECIFY_NOEXCEPT == 1
 #    define OPTIONAL_EXCEPTION_SPECIFIER noexcept
 #    define LIBRARY_NAMESPACE noexcept_test
-const char* const testName = "noexcept-test";
 #  endif
 #endif
 

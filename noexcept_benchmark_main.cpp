@@ -35,7 +35,7 @@ namespace noexcept_test
   };
 }
 
-namespace unspecified_exception_specification_test
+namespace implicit_except_test
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
@@ -67,7 +67,7 @@ namespace
   struct test_result
   {
     unsigned number_of_times_noexcept_is_faster = 0;
-    unsigned number_of_times_unspecified_is_faster = 0;
+    unsigned number_of_times_implicit_is_faster = 0;
   };
 
 
@@ -88,11 +88,12 @@ namespace
   {
     std::cout
       << duration_seconds_to_string(durations.first)
-      << "(noexcept)\n"
+      << "(explicitly defined 'noexcept')\n"
       << duration_seconds_to_string(durations.second)
-      << "(unspecified exception specification)\n"
+      << "(implicitly defined exception specification)\n"
       << std::flush;
   }
+
 
   void update_test_result(test_result& result, const std::pair<double, double> durations)
   {
@@ -102,27 +103,29 @@ namespace
     }
     if (durations.second < durations.first)
     {
-      ++result.number_of_times_unspecified_is_faster;
+      ++result.number_of_times_implicit_is_faster;
     }
   }
+
 
   void print_conclusion(const test_result& result)
   {
     if (result.number_of_times_noexcept_is_faster == max_number_of_times)
     {
-      std::cout << "Conclusion for this test case: noexcept seems faster" << std::endl;
+      std::cout << "So for this test case, 'noexcept' seems faster.";
     }
     else
     {
-      if (result.number_of_times_unspecified_is_faster == max_number_of_times)
+      if (result.number_of_times_implicit_is_faster == max_number_of_times)
       {
-        std::cout << "Conclusion for this test case: unspecified seems faster" << std::endl;
+        std::cout << "So for this test case, an implicitly defined exception specification seems faster.";
       }
       else
       {
-        std::cout << "Conclusion for this test case: it seems unclear whether noexcept or unspecified is faster" << std::endl;
+        std::cout << "So for this test case, it seems unclear whether 'noexcept' or implicit is faster.";
       }
     }
+    std::cout << std::endl;
   }
 
 }
@@ -165,7 +168,7 @@ int main()
     {
       const auto durations = std::make_pair(
         noexcept_test::test_inline_func(),
-        unspecified_exception_specification_test::test_inline_func());
+        implicit_except_test::test_inline_func());
       print_durations(durations);
       update_test_result(result, durations);
     }
@@ -190,7 +193,7 @@ int main()
       },
         []
       {
-        recursive_func<unspecified_exception_specification_test::dummy_class>(numberOfFuncCalls);
+        recursive_func<implicit_except_test::dummy_class>(numberOfFuncCalls);
       });
 
       print_durations(durations);
@@ -223,7 +226,7 @@ int main()
       {
         for (int i = 0; i < numberOfFuncCalls; ++i)
         {
-          unspecified_exception_specification_test::exported_func(false);
+          implicit_except_test::exported_func(false);
         }
       });
       print_durations(durations);
@@ -243,7 +246,7 @@ int main()
     {
       const auto durations = std::make_pair(
         noexcept_test::test_vector_reserve(),
-        unspecified_exception_specification_test::test_vector_reserve());
+        implicit_except_test::test_vector_reserve());
       print_durations(durations);
       update_test_result(result, durations);
     }
