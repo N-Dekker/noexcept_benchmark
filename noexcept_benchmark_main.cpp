@@ -35,6 +35,17 @@ namespace noexcept_test
     dummy_class() noexcept;
     ~dummy_class();
   };
+
+
+  void recursive_func(unsigned short numberOfFuncCalls) noexcept
+  {
+    dummy_class dummy;
+
+    if (--numberOfFuncCalls > 0)
+    {
+      recursive_func(numberOfFuncCalls);
+    }
+  }
 }
 
 namespace implicit_except_test
@@ -49,22 +60,28 @@ namespace implicit_except_test
     dummy_class(); // No noexcept
     ~dummy_class();
   };
+
+
+  void recursive_func(unsigned short numberOfFuncCalls)
+  {
+    dummy_class dummy;
+
+    if (--numberOfFuncCalls > 0)
+    {
+      recursive_func(numberOfFuncCalls);
+    }
+  }
 }
 
 namespace
 {
   const int max_number_of_times = 4;
 
-  template <typename T>
-  void recursive_func(unsigned short numberOfFuncCalls)
+  struct durations_type
   {
-    T dummy;
-
-    if (--numberOfFuncCalls > 0)
-    {
-      recursive_func<T>(numberOfFuncCalls);
-    }
-  }
+    double duration_noexcept;
+    double duration_implicit;
+  };
 
   struct test_result
   {
@@ -76,9 +93,12 @@ namespace
 
 
   template <typename T1, typename T2>
-  std::pair<double, double> profile_func_calls(T1 func1, T2 func2)
+  durations_type profile_func_calls(T1 func1, T2 func2)
   {
-    return std::make_pair(profile_func_call(func1), profile_func_call(func2));
+    durations_type durations;
+    durations.duration_noexcept = profile_func_call(func1);
+    durations.duration_implicit = profile_func_call(func2);
+    return durations;
   }
     
 
@@ -88,27 +108,27 @@ namespace
   }
   
   
-  void print_durations(const std::pair<double, double> durations)
+  void print_durations(const durations_type& durations)
   {
     std::cout
-      << duration_seconds_to_string(durations.first)
+      << duration_seconds_to_string(durations.duration_noexcept)
       << "(explicitly defined 'noexcept')\n"
-      << duration_seconds_to_string(durations.second)
+      << duration_seconds_to_string(durations.duration_implicit)
       << "(implicitly defined exception specification)\n"
       << std::flush;
   }
 
 
-  void update_test_result(test_result& result, const std::pair<double, double> durations)
+  void update_test_result(test_result& result, const durations_type& durations)
   {
-    result.sum_of_durations_noexcept += durations.first;
-    result.sum_of_durations_implicit += durations.second;
+    result.sum_of_durations_noexcept += durations.duration_noexcept;
+    result.sum_of_durations_implicit += durations.duration_implicit;
 
-    if (durations.first < durations.second)
+    if (durations.duration_noexcept < durations.duration_implicit)
     {
       ++result.number_of_times_noexcept_is_faster;
     }
-    if (durations.second < durations.first)
+    if (durations.duration_implicit < durations.duration_noexcept)
     {
       ++result.number_of_times_implicit_is_faster;
     }
@@ -186,9 +206,9 @@ int main()
 
     for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
     {
-      const auto durations = std::make_pair(
-        noexcept_test::test_inline_func(),
-        implicit_except_test::test_inline_func());
+      durations_type durations;
+      durations.duration_noexcept = noexcept_test::test_inline_func();
+      durations.duration_implicit = implicit_except_test::test_inline_func();
       print_durations(durations);
       update_test_result(result, durations);
     }
@@ -209,11 +229,11 @@ int main()
       const auto durations = profile_func_calls(
         []
       {
-        recursive_func<noexcept_test::dummy_class>(numberOfFuncCalls);
+        noexcept_test::recursive_func(numberOfFuncCalls);
       },
         []
       {
-        recursive_func<implicit_except_test::dummy_class>(numberOfFuncCalls);
+        implicit_except_test::recursive_func(numberOfFuncCalls);
       });
 
       print_durations(durations);
@@ -264,9 +284,9 @@ int main()
 
     for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
     {
-      const auto durations = std::make_pair(
-        noexcept_test::test_vector_reserve(),
-        implicit_except_test::test_vector_reserve());
+      durations_type durations;
+      durations.duration_noexcept = noexcept_test::test_vector_reserve();
+      durations.duration_implicit = implicit_except_test::test_vector_reserve();
       print_durations(durations);
       update_test_result(result, durations);
     }
