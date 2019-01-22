@@ -29,15 +29,17 @@ limitations under the License.
 #  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
 #endif
 
-#if SPECIFY_NOEXCEPT == 0
-#define OPTIONAL_EXCEPTION_SPECIFIER
-#define LIBRARY_NAMESPACE unspecified_exception_specification_test
+#ifdef SPECIFY_NOEXCEPT
+#  if SPECIFY_NOEXCEPT == 0
+#    define OPTIONAL_EXCEPTION_SPECIFIER
+#    define LIBRARY_NAMESPACE unspecified_exception_specification_test
 const char* const testName = "unspecified-except-spec-test";
-#endif
-#if SPECIFY_NOEXCEPT == 1
-#define OPTIONAL_EXCEPTION_SPECIFIER noexcept
-#define LIBRARY_NAMESPACE noexcept_test
+#  endif
+#  if SPECIFY_NOEXCEPT == 1
+#    define OPTIONAL_EXCEPTION_SPECIFIER noexcept
+#    define LIBRARY_NAMESPACE noexcept_test
 const char* const testName = "noexcept-test";
+#  endif
 #endif
 
 
@@ -46,10 +48,12 @@ const char* const testName = "noexcept-test";
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 167890002
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 690000002
 #  define NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE 7500002
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS 10002
 #else
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 16789001
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 69000001
 #  define NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE 750001
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS 1001
 #endif
 
 namespace noexcept_benchmark

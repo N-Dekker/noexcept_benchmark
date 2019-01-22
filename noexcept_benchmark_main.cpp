@@ -23,6 +23,13 @@ namespace noexcept_test
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception) noexcept;
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
+
+  class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
+  {
+  public:
+    dummy_class() noexcept;
+    ~dummy_class();
+  };
 }
 
 namespace unspecified_exception_specification_test
@@ -30,8 +37,28 @@ namespace unspecified_exception_specification_test
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
+
+  class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
+  {
+  public:
+    dummy_class(); // No noexcept
+    ~dummy_class();
+  };
 }
 
+namespace
+{
+  template <typename T>
+  void recursive_func(unsigned short numberOfFuncCalls)
+  {
+    T dummy;
+
+    if (--numberOfFuncCalls > 0)
+    {
+      recursive_func<T>(numberOfFuncCalls);
+    }
+  }
+}
 
 int main()
 {
@@ -68,6 +95,30 @@ int main()
     noexcept_test::test_inline_func();
     unspecified_exception_specification_test::test_inline_func();
   }
+
+  std::cout << "\n[recursive_func (N = "
+    << NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS
+    << ")]"
+    << std::endl;
+
+  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
+  {
+    enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
+
+    std::cout
+      << "noexcept-test:\n"
+      << noexcept_benchmark::profile_func_call([]
+    {
+      recursive_func<noexcept_test::dummy_class>(numberOfFuncCalls);
+    })
+      << "unspecified-except-spec-test:\n"
+      << noexcept_benchmark::profile_func_call([]
+    {
+      recursive_func<unspecified_exception_specification_test::dummy_class>(numberOfFuncCalls);
+    })
+      << std::flush;
+  }
+
   std::cout << "\n[exported_func(false) calls (N = "
     << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
     << ")]"
