@@ -17,12 +17,15 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 #include <chrono>
 #include <iostream>
+#include <string>
+
+using namespace noexcept_benchmark;
 
 namespace noexcept_test
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception) noexcept;
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_vector_reserve();
 
   class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
   {
@@ -35,8 +38,8 @@ namespace noexcept_test
 namespace unspecified_exception_specification_test
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inline_func();
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_vector_reserve();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_vector_reserve();
 
   class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
   {
@@ -48,6 +51,8 @@ namespace unspecified_exception_specification_test
 
 namespace
 {
+  const int max_number_of_times = 4;
+
   template <typename T>
   void recursive_func(unsigned short numberOfFuncCalls)
   {
@@ -58,6 +63,68 @@ namespace
       recursive_func<T>(numberOfFuncCalls);
     }
   }
+
+  struct test_result
+  {
+    unsigned number_of_times_noexcept_is_faster = 0;
+    unsigned number_of_times_unspecified_is_faster = 0;
+  };
+
+
+  template <typename T1, typename T2>
+  std::pair<double, double> profile_func_calls(T1 func1, T2 func2)
+  {
+    return std::make_pair(profile_func_call(func1), profile_func_call(func2));
+  }
+    
+
+  std::string duration_seconds_to_string(const double seconds)
+  {
+    return "\tDuration = " + std::to_string(seconds) + " sec. ";
+  }
+  
+  
+  void print_durations(const std::pair<double, double> durations)
+  {
+    std::cout
+      << duration_seconds_to_string(durations.first)
+      << "(noexcept)\n"
+      << duration_seconds_to_string(durations.second)
+      << "(unspecified exception specification)\n"
+      << std::flush;
+  }
+
+  void update_test_result(test_result& result, const std::pair<double, double> durations)
+  {
+    if (durations.first < durations.second)
+    {
+      ++result.number_of_times_noexcept_is_faster;
+    }
+    if (durations.second < durations.first)
+    {
+      ++result.number_of_times_unspecified_is_faster;
+    }
+  }
+
+  void print_conclusion(const test_result& result)
+  {
+    if (result.number_of_times_noexcept_is_faster == max_number_of_times)
+    {
+      std::cout << "Conclusion for this test case: noexcept seems faster" << std::endl;
+    }
+    else
+    {
+      if (result.number_of_times_unspecified_is_faster == max_number_of_times)
+      {
+        std::cout << "Conclusion for this test case: unspecified seems faster" << std::endl;
+      }
+      else
+      {
+        std::cout << "Conclusion for this test case: it seems unclear whether noexcept or unspecified is faster" << std::endl;
+      }
+    }
+  }
+
 }
 
 int main()
@@ -85,79 +152,102 @@ int main()
 #endif
     << std::endl;
 
-  std::cout << "\n[test_inline_func (N = "
-    << NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
-    << ")]"
-    << std::endl;
 
-  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {
-    noexcept_test::test_inline_func();
-    unspecified_exception_specification_test::test_inline_func();
+    test_result result;
+
+    std::cout << "\n[test_inline_func (N = "
+      << NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
+      << ")]"
+      << std::endl;
+
+    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    {
+      const auto durations = std::make_pair(
+        noexcept_test::test_inline_func(),
+        unspecified_exception_specification_test::test_inline_func());
+      print_durations(durations);
+      update_test_result(result, durations);
+    }
+    print_conclusion(result);
   }
-
-  std::cout << "\n[recursive_func (N = "
-    << NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS
-    << ")]"
-    << std::endl;
-
-  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
   {
-    enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
+    test_result result;
 
-    std::cout
-      << "noexcept-test:\n"
-      << noexcept_benchmark::profile_func_call([]
+    std::cout << "\n[recursive_func (N = "
+      << NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS
+      << ")]"
+      << std::endl;
+
+    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
     {
-      recursive_func<noexcept_test::dummy_class>(numberOfFuncCalls);
-    })
-      << "unspecified-except-spec-test:\n"
-      << noexcept_benchmark::profile_func_call([]
-    {
-      recursive_func<unspecified_exception_specification_test::dummy_class>(numberOfFuncCalls);
-    })
-      << std::flush;
-  }
+      enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
 
-  std::cout << "\n[exported_func(false) calls (N = "
-    << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
-    << ")]"
-    << std::endl;
-
-  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
-  {
-    enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
-
-    std::cout
-      << "noexcept-test:\n"
-      << noexcept_benchmark::profile_func_call([]
-    {
-      for (int i = 0; i < numberOfFuncCalls; ++i)
+      const auto durations = profile_func_calls(
+        []
       {
-        noexcept_test::exported_func(false);
-      }
-    })
-      << "unspecified-except-spec-test:\n"
-      << noexcept_benchmark::profile_func_call([]
-    {
-      for (int i = 0; i < numberOfFuncCalls; ++i)
+        recursive_func<noexcept_test::dummy_class>(numberOfFuncCalls);
+      },
+        []
       {
-        unspecified_exception_specification_test::exported_func(false);
-      }
-    })
-      << std::flush;
-  }
-  std::cout << "\n[test_vector_reserve (N = "
-    << NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
-    << ")]"
-    << std::endl;
+        recursive_func<unspecified_exception_specification_test::dummy_class>(numberOfFuncCalls);
+      });
 
-  for (int numberOfTimes = 0; numberOfTimes < 3; ++numberOfTimes)
+      print_durations(durations);
+      update_test_result(result, durations);
+    }
+    print_conclusion(result);
+  }
+
   {
-    std::cout << "noexcept-test:\n" << std::flush;
-    noexcept_test::test_vector_reserve();
-    std::cout << "unspecified-except-spec-test:\n" << std::flush;
-    unspecified_exception_specification_test::test_vector_reserve();
-  }
+    test_result result;
 
+    std::cout << "\n[exported_func(false) calls (N = "
+      << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
+      << ")]"
+      << std::endl;
+
+    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    {
+      enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
+
+      const auto durations = profile_func_calls(
+        []
+      {
+        for (int i = 0; i < numberOfFuncCalls; ++i)
+        {
+          noexcept_test::exported_func(false);
+        }
+      },
+        []
+      {
+        for (int i = 0; i < numberOfFuncCalls; ++i)
+        {
+          unspecified_exception_specification_test::exported_func(false);
+        }
+      });
+      print_durations(durations);
+      update_test_result(result, durations);
+    }
+    print_conclusion(result);
+  }
+  {
+    test_result result;
+
+    std::cout << "\n[test_vector_reserve (N = "
+      << NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
+      << ")]"
+      << std::endl;
+
+    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    {
+      const auto durations = std::make_pair(
+        noexcept_test::test_vector_reserve(),
+        unspecified_exception_specification_test::test_vector_reserve());
+      print_durations(durations);
+      update_test_result(result, durations);
+    }
+    print_conclusion(result);
+  }
+  return 0;
 }

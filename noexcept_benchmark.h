@@ -18,8 +18,6 @@ limitations under the License.
 */
 
 #include <chrono>
-#include <string>
-
 
 #ifdef _WIN32
 #  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT __declspec(dllimport)
@@ -59,15 +57,17 @@ const char* const testName = "noexcept-test";
 namespace noexcept_benchmark
 {
   template <typename T>
-  std::string profile_func_call(T func)
+  double profile_func_call(T func)
   {
     using namespace std::chrono;
+    
     const auto time_point1 = high_resolution_clock::now();
     func();
     const auto time_point2 = high_resolution_clock::now();
-    const auto duration = duration_cast<std::chrono::duration<double>>(time_point2 - time_point1);
-    return "\tDuration = " + std::to_string(duration.count()) + " second(s)\n";
+
+    return duration_cast<duration<double>>(time_point2 - time_point1).count();
   }
+
 }
 
 

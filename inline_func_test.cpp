@@ -17,8 +17,6 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 
 #include <cassert>
-#include <chrono>
-#include <iostream>
 #include <exception>
 
 namespace
@@ -42,20 +40,16 @@ namespace
 
 namespace LIBRARY_NAMESPACE
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void test_inline_func()
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func()
   {
     enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
 
-    std::cout
-      << testName
-      << ":\n"
-      << noexcept_benchmark::profile_func_call([]
+    return noexcept_benchmark::profile_func_call([]
     {
       for (int i = 0; i < number_of_func_calls; ++i)
       {
         inline_func(false);
       }
-    })
-      << std::flush;
+    });
   }
 }

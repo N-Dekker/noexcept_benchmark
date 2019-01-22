@@ -16,9 +16,6 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 
-#include <cassert>
-#include <chrono>
-#include <iostream>
 #include <vector>
 #include <cstring>
 
@@ -79,15 +76,13 @@ namespace
 
 namespace LIBRARY_NAMESPACE
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void test_vector_reserve()
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve()
   {
     std::vector<my_string> strings(NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE, my_string(1));
 
-    std::cout
-      << noexcept_benchmark::profile_func_call([&strings]
+    return noexcept_benchmark::profile_func_call([&strings]
     {
       strings.reserve(strings.capacity() + 1);
-    })
-      << std::flush;
+    });
   }
 }
