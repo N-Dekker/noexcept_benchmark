@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 #include "noexcept_benchmark.h"
+#include <algorithm>
 #include <chrono>
+#include <limits>
 #include <iostream>
 #include <string>
 
@@ -68,6 +70,8 @@ namespace
   {
     unsigned number_of_times_noexcept_is_faster = 0;
     unsigned number_of_times_implicit_is_faster = 0;
+    double sum_of_durations_noexcept = 0.0;
+    double sum_of_durations_implicit = 0.0;
   };
 
 
@@ -97,6 +101,9 @@ namespace
 
   void update_test_result(test_result& result, const std::pair<double, double> durations)
   {
+    result.sum_of_durations_noexcept += durations.first;
+    result.sum_of_durations_implicit += durations.second;
+
     if (durations.first < durations.second)
     {
       ++result.number_of_times_noexcept_is_faster;
@@ -107,18 +114,29 @@ namespace
     }
   }
 
+  double divide_by_positive(const double x, const double y)
+  {
+    return x /
+      ((y > 0) ? y : std::numeric_limits<double>::denorm_min());
+  }
+
 
   void print_conclusion(const test_result& result)
   {
     if (result.number_of_times_noexcept_is_faster == max_number_of_times)
     {
-      std::cout << "So for this test case, 'noexcept' seems faster.";
+      std::cout << "So for this test case, 'noexcept' seems approximately "
+        << divide_by_positive(result.sum_of_durations_implicit, result.sum_of_durations_noexcept)
+        << " x faster.";
     }
     else
     {
       if (result.number_of_times_implicit_is_faster == max_number_of_times)
       {
-        std::cout << "So for this test case, an implicitly defined exception specification seems faster.";
+        std::cout
+          << "So for this test case, an implicitly defined exception specification seems approximately "
+          << divide_by_positive(result.sum_of_durations_noexcept, result.sum_of_durations_implicit)
+          << " x faster.";
       }
       else
       {
@@ -135,6 +153,8 @@ int main()
   std::cout
     << "__FILE__ = " << __FILE__
     << "\nsizeof(void*) = " << sizeof(void*)
+    << "\n__DATE__ = " << __DATE__
+    << "\n__TIME__ = " << __TIME__
 #ifdef __VERSION__
     << "\n__VERSION__ = "
     __VERSION__
