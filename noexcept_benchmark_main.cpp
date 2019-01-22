@@ -75,7 +75,7 @@ namespace implicit_except_test
 
 namespace
 {
-  const int max_number_of_times = 4;
+  const int max_number_of_times = 7;
 
   struct durations_type
   {
@@ -204,7 +204,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_inline_func();
@@ -222,7 +222,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
     {
       enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
 
@@ -250,7 +250,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
     {
       enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
 
@@ -282,7 +282,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int numberOfTimes = 0; numberOfTimes < max_number_of_times; ++numberOfTimes)
+    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_vector_reserve();
