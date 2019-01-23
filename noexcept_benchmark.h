@@ -41,6 +41,10 @@ limitations under the License.
 #  endif
 #endif
 
+#ifndef NUMBER_OF_ITERATIONS
+#  define NUMBER_OF_ITERATIONS 7
+#endif
+
 #ifdef NDEBUG
 #  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
 #    define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 567890000

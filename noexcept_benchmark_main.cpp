@@ -100,7 +100,7 @@ namespace implicit_except_test
 
 namespace
 {
-  const int max_number_of_times = 7;
+  const int number_of_iterations = NUMBER_OF_ITERATIONS;
 
   struct durations_type
   {
@@ -168,7 +168,7 @@ namespace
 
   void print_conclusion(const test_result& result)
   {
-    if (result.number_of_times_noexcept_is_faster == max_number_of_times)
+    if (result.number_of_times_noexcept_is_faster == number_of_iterations)
     {
       std::cout << "So 'noexcept' seems approximately "
         << divide_by_positive(result.sum_of_durations_implicit, result.sum_of_durations_noexcept)
@@ -176,7 +176,7 @@ namespace
     }
     else
     {
-      if (result.number_of_times_implicit_is_faster == max_number_of_times)
+      if (result.number_of_times_implicit_is_faster == number_of_iterations)
       {
         std::cout
           << "So an implicitly defined exception specification seems approximately "
@@ -229,7 +229,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_inline_func();
@@ -247,7 +247,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS };
 
@@ -274,7 +274,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
 
@@ -301,7 +301,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
 
@@ -333,7 +333,7 @@ int main()
       << ")]"
       << std::endl;
 
-    for (int number_of_times = 0; number_of_times < max_number_of_times; ++number_of_times)
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_vector_reserve();
