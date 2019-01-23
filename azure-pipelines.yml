@@ -1,7 +1,8 @@
-pool:
-  vmImage: 'VS2017-Win2016'
-
-steps:
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'VS2017-Win2016'
+  steps:
   - script: |
       mkdir build32
       cd build32
@@ -16,3 +17,13 @@ steps:
       cmake .. -G "Visual Studio 15 2017 Win64"
       MSBuild.exe ..\build64\noexcept_benchmark.sln
       ..\build64\Release\noexcept_benchmark.exe
+
+- job: Ubuntu1604
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - script: |
+      mkdir build
+      cd build
+      cmake ..
+      make && ../build/noexcept_benchmark
