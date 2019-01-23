@@ -27,3 +27,13 @@ jobs:
       cd build
       cmake ..
       make && ../build/noexcept_benchmark
+
+- job: macOS
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - script: |
+      mkdir build
+      cd build
+      cmake ..
+      make && ../build/noexcept_benchmark
