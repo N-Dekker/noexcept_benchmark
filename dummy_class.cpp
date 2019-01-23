@@ -16,6 +16,7 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 #include <iostream>
+#include <exception>
 
 namespace LIBRARY_NAMESPACE
 {
@@ -33,7 +34,14 @@ namespace LIBRARY_NAMESPACE
 
   dummy_class::~dummy_class()
   {
-    std::cout.flush();
+    try
+    {
+      std::cout.flush();
+    }
+    catch (const std::exception&)
+    {
+      // No exception should leave the destructor!
+    }
   }
 
 }
