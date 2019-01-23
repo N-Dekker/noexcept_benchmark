@@ -170,22 +170,22 @@ namespace
   {
     if (result.number_of_times_noexcept_is_faster == max_number_of_times)
     {
-      std::cout << "So for this test case, 'noexcept' seems approximately "
+      std::cout << "So 'noexcept' seems approximately "
         << divide_by_positive(result.sum_of_durations_implicit, result.sum_of_durations_noexcept)
-        << " x faster.";
+        << " x faster, for this test case.";
     }
     else
     {
       if (result.number_of_times_implicit_is_faster == max_number_of_times)
       {
         std::cout
-          << "So for this test case, an implicitly defined exception specification seems approximately "
+          << "So an implicitly defined exception specification seems approximately "
           << divide_by_positive(result.sum_of_durations_noexcept, result.sum_of_durations_implicit)
-          << " x faster.";
+          << " x faster, for this test case.";
       }
       else
       {
-        std::cout << "So for this test case, it seems unclear whether 'noexcept' or implicit is faster.";
+        std::cout << "So it seems unclear whether 'noexcept' or implicit is faster, for this test case.";
       }
     }
     std::cout << std::endl;
