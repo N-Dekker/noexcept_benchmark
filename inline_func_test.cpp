@@ -16,24 +16,11 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 
-#include <cassert>
-#include <exception>
-
 namespace
 {
-  inline void throw_if_true(const bool do_throw_exception)
-  {
-    if (do_throw_exception)
-    {
-      throw std::exception{};
-    }
-  }
-
-
   inline void inline_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
-    assert(!do_throw_exception);
-    throw_if_true(do_throw_exception);
+    noexcept_benchmark::throw_if_true(do_throw_exception);
   }
 }
 

@@ -17,7 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <cassert>
 #include <chrono>
+#include <exception>
+
 
 #ifdef _WIN32
 #  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT __declspec(dllimport)
@@ -56,6 +59,16 @@ limitations under the License.
 
 namespace noexcept_benchmark
 {
+  inline void throw_if_true(const bool do_throw_exception = false)
+  {
+    if (do_throw_exception)
+    {
+      assert(!"This function should only be called with do_throw_exception = false!");
+      throw std::exception{};
+    }
+  }
+
+
   template <typename T>
   double profile_func_call(T func)
   {
