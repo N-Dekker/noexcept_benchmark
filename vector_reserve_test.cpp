@@ -19,6 +19,9 @@ limitations under the License.
 #include <vector>
 #include <cstring>
 
+#ifdef _MSC_VER  // Microsoft Visual C++
+#  pragma warning(disable: 4996) // 'strcpy': This function or variable may be unsafe
+#endif
 
 namespace
 {
