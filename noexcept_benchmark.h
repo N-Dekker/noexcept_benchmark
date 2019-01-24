@@ -74,7 +74,7 @@ limitations under the License.
 
 namespace noexcept_benchmark
 {
-  inline void throw_if_true(const bool do_throw_exception = false)
+  inline void throw_exception_if(const bool do_throw_exception)
   {
     if (do_throw_exception)
     {

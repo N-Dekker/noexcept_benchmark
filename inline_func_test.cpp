@@ -20,7 +20,7 @@ namespace
 {
   inline void inline_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
-    noexcept_benchmark::throw_if_true(do_throw_exception);
+    noexcept_benchmark::throw_exception_if(do_throw_exception);
   }
 }
 
