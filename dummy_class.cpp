@@ -32,8 +32,7 @@ namespace LIBRARY_NAMESPACE
   
   dummy_class::dummy_class() OPTIONAL_EXCEPTION_SPECIFIER
   {
-    const auto current_time = std::time(nullptr);
-    noexcept_benchmark::throw_exception_if(current_time != current_time);
+    noexcept_benchmark::throw_exception_if(std::time(nullptr) == 0);
   }
 
   dummy_class::~dummy_class()
