@@ -55,6 +55,7 @@ target_compile_definitions(implicit_except_lib PRIVATE SPECIFY_NOEXCEPT=0)
 
 
 add_executable(${PROJECT_NAME}
+  ${PROJECT_NAME}.h
   ${PROJECT_NAME}_main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
