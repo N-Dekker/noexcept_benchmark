@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 #include "noexcept_benchmark.h"
+
+#include <ctime>
 #include <iostream>
 #include <exception>
 
@@ -30,6 +32,8 @@ namespace LIBRARY_NAMESPACE
   
   dummy_class::dummy_class() OPTIONAL_EXCEPTION_SPECIFIER
   {
+    const auto current_time = std::time(nullptr);
+    noexcept_benchmark::throw_exception_if(current_time != current_time);
   }
 
   dummy_class::~dummy_class()
