@@ -4,19 +4,31 @@ jobs:
     vmImage: 'VS2017-Win2016'
   steps:
   - script: |
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
       mkdir build32
       cd build32
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
       cmake .. -G "Visual Studio 15 2017"
       MSBuild.exe ..\build32\noexcept_benchmark.sln  /p:Platform="Win32"
       ..\build32\Release\noexcept_benchmark.exe
       cd ..
+      mkdir build32_no_throw
+      cd build32_no_throw
+      cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF .. -G "Visual Studio 15 2017"
+      MSBuild.exe ..\build32_no_throw\noexcept_benchmark.sln  /p:Platform="Win32"
+      ..\build32_no_throw\Release\noexcept_benchmark.exe
+      cd ..
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       mkdir build64
       cd build64
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       cmake .. -G "Visual Studio 15 2017 Win64"
       MSBuild.exe ..\build64\noexcept_benchmark.sln
       ..\build64\Release\noexcept_benchmark.exe
+      cd ..
+      mkdir build64_no_throw
+      cd build64_no_throw
+      cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF .. -G "Visual Studio 15 2017 Win64"
+      MSBuild.exe ..\build64_no_throw\noexcept_benchmark.sln
+      ..\build64_no_throw\Release\noexcept_benchmark.exe
 
 - job: Ubuntu1604
   pool:
@@ -27,6 +39,11 @@ jobs:
       cd build
       cmake ..
       make && ../build/noexcept_benchmark
+      cd ..
+      mkdir build_no_throw
+      cd build_no_throw
+      cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF ..
+      make && ../build_no_throw/noexcept_benchmark
 
 - job: macOS
   pool:
@@ -37,3 +54,8 @@ jobs:
       cd build
       cmake ..
       make && ../build/noexcept_benchmark
+      cd ..
+      mkdir build_no_throw
+      cd build_no_throw
+      cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF ..
+      make && ../build_no_throw/noexcept_benchmark
