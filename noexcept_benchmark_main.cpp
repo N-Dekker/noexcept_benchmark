@@ -37,21 +37,20 @@ namespace noexcept_test
   };
 
 
-  void recursive_func(unsigned short numberOfFuncCalls) noexcept
+  void recursive_func(unsigned short number_of_func_calls) noexcept
   {
-    dummy_class dummy;
-
-    if (--numberOfFuncCalls > 0)
+    if (--number_of_func_calls > 0)
     {
-      recursive_func(numberOfFuncCalls);
+      dummy_class dummy;
+      recursive_func(number_of_func_calls);
     }
   }
 
-  template <unsigned numberOfFuncCalls>
+  template <unsigned number_of_func_calls>
   void recursive_func_template() noexcept
   {
     dummy_class dummy;
-    recursive_func_template<numberOfFuncCalls - 1>();
+    recursive_func_template<number_of_func_calls - 1>();
   }
 
   template <>
@@ -74,11 +73,11 @@ namespace implicit_except_test
     ~dummy_class();
   };
 
-  template <unsigned numberOfFuncCalls>
+  template <unsigned number_of_func_calls>
   void recursive_func_template()
   {
     dummy_class dummy;
-    recursive_func_template<numberOfFuncCalls - 1>();
+    recursive_func_template<number_of_func_calls - 1>();
   }
 
   template <>
@@ -87,13 +86,12 @@ namespace implicit_except_test
   }
 
 
-  void recursive_func(unsigned short numberOfFuncCalls)
+  void recursive_func(unsigned short number_of_func_calls)
   {
-    dummy_class dummy;
-
-    if (--numberOfFuncCalls > 0)
+    if (--number_of_func_calls > 0)
     {
-      recursive_func(numberOfFuncCalls);
+      dummy_class dummy;
+      recursive_func(number_of_func_calls);
     }
   }
 }
@@ -126,6 +124,11 @@ namespace
     return durations;
   }
     
+  void print_test_case_header(const char* const test_case_name, const unsigned n)
+  {
+    std::cout << "\n[" << test_case_name << " (N = " << n << ")]" << std::endl;
+  }
+
 
   std::string duration_seconds_to_string(const double seconds)
   {
@@ -226,10 +229,7 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[inline function calls (N = "
-      << NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
-      << ")]"
-      << std::endl;
+    print_test_case_header("inline function calls", NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS);
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -244,80 +244,23 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[recursive function template calls (N = "
-      << NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS
-      << ")]"
-      << std::endl;
+    print_test_case_header("exported library function calls", NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS);
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
-      enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS };
+      enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
 
       const auto durations = profile_func_calls(
         []
       {
-        noexcept_test::recursive_func_template<numberOfFuncCalls>();
-      },
-        []
-      {
-        implicit_except_test::recursive_func_template<numberOfFuncCalls>();;
-      });
-
-      print_durations(durations);
-      update_test_result(result, durations);
-    }
-    print_conclusion(result);
-  }
-  {
-    test_result result;
-
-    std::cout << "\n[recursive function calls (N = "
-      << NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS
-      << ")]"
-      << std::endl;
-
-    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
-    {
-      enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
-
-      const auto durations = profile_func_calls(
-        []
-      {
-        noexcept_test::recursive_func(numberOfFuncCalls);
-      },
-        []
-      {
-        implicit_except_test::recursive_func(numberOfFuncCalls);
-      });
-
-      print_durations(durations);
-      update_test_result(result, durations);
-    }
-    print_conclusion(result);
-  }
-  {
-    test_result result;
-
-    std::cout << "\n[exported library function calls (N = "
-      << NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
-      << ")]"
-      << std::endl;
-
-    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
-    {
-      enum { numberOfFuncCalls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
-
-      const auto durations = profile_func_calls(
-        []
-      {
-        for (int i = 0; i < numberOfFuncCalls; ++i)
+        for (int i = 0; i < number_of_func_calls; ++i)
         {
           noexcept_test::exported_func(false);
         }
       },
         []
       {
-        for (int i = 0; i < numberOfFuncCalls; ++i)
+        for (int i = 0; i < number_of_func_calls; ++i)
         {
           implicit_except_test::exported_func(false);
         }
@@ -330,10 +273,55 @@ int main()
   {
     test_result result;
 
-    std::cout << "\n[std::vector reserve (N = "
-      << NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
-      << ")]"
-      << std::endl;
+    print_test_case_header("recursive function calls", NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS);
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
+
+      const auto durations = profile_func_calls(
+        []
+      {
+        noexcept_test::recursive_func(number_of_func_calls);
+      },
+        []
+      {
+        implicit_except_test::recursive_func(number_of_func_calls);
+      });
+
+      print_durations(durations);
+      update_test_result(result, durations);
+    }
+    print_conclusion(result);
+  }
+  {
+    test_result result;
+
+    print_test_case_header("template recursion", NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS);
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS };
+
+      const auto durations = profile_func_calls(
+        []
+      {
+        noexcept_test::recursive_func_template<number_of_func_calls>();
+      },
+        []
+      {
+        implicit_except_test::recursive_func_template<number_of_func_calls>();;
+      });
+
+      print_durations(durations);
+      update_test_result(result, durations);
+    }
+    print_conclusion(result);
+  }
+  {
+    test_result result;
+
+    print_test_case_header("std::vector reserve", NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE);
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
