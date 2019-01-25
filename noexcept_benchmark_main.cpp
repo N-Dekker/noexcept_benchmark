@@ -106,12 +106,81 @@ namespace
     double duration_implicit;
   };
 
-  struct test_result
+  
+  double divide_by_positive(const double x, const double y)
   {
-    unsigned number_of_times_noexcept_is_faster = 0;
-    unsigned number_of_times_implicit_is_faster = 0;
-    double sum_of_durations_noexcept = 0.0;
-    double sum_of_durations_implicit = 0.0;
+    return x /
+      ((y > 0) ? y : std::numeric_limits<double>::denorm_min());
+  }
+
+  template <unsigned N>
+  class test_result
+  {
+    unsigned m_number_of_times_noexcept_is_faster = 0;
+    unsigned m_number_of_times_implicit_is_faster = 0;
+    double m_sum_of_durations_noexcept = 0.0;
+    double m_sum_of_durations_implicit = 0.0;
+    const char* const m_test_case_name;
+
+  public:
+
+    explicit test_result(const char* const test_case_name)
+      :
+      m_test_case_name{ test_case_name }
+    {
+      std::cout << "\n[" << test_case_name << " (N = " << N << ")]" << std::endl;
+    }
+
+    void update_test_result(const durations_type& durations)
+    {
+      m_sum_of_durations_noexcept += durations.duration_noexcept;
+      m_sum_of_durations_implicit += durations.duration_implicit;
+
+      if (durations.duration_noexcept < durations.duration_implicit)
+      {
+        ++m_number_of_times_noexcept_is_faster;
+      }
+      if (durations.duration_implicit < durations.duration_noexcept)
+      {
+        ++m_number_of_times_implicit_is_faster;
+      }
+    }
+
+    ~test_result()
+    {
+      std::cout
+        << "  Total: "
+        << std::to_string(m_sum_of_durations_noexcept)
+        << " sec. (explicit 'noexcept')\n"
+        << "  Total: "
+        << std::to_string(m_sum_of_durations_implicit)
+        << " sec. (implicit exception specification)\n"
+        << "Tentative conclusion for this case [" << m_test_case_name << "]:\n  ";
+
+      if (m_number_of_times_noexcept_is_faster == number_of_iterations)
+      {
+        std::cout
+          << "Explicit 'noexcept' specifications seem approximately "
+          << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
+          << " x faster.";
+      }
+      else
+      {
+        if (m_number_of_times_implicit_is_faster == number_of_iterations)
+        {
+          std::cout
+            << "Implicit exception specifications seem approximately "
+            << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
+            << " x faster.";
+        }
+        else
+        {
+          std::cout
+            << "It seems unclear whether noexcept or implicit specifications are faster.";
+        }
+      }
+      std::cout << std::endl;
+    }
   };
 
 
@@ -124,74 +193,21 @@ namespace
     return durations;
   }
     
-  void print_test_case_header(const char* const test_case_name, const unsigned n)
-  {
-    std::cout << "\n[" << test_case_name << " (N = " << n << ")]" << std::endl;
-  }
 
-
-  std::string duration_seconds_to_string(const double seconds)
-  {
-    return "\tDuration = " + std::to_string(seconds) + " sec. ";
-  }
-  
-  
-  void print_durations(const durations_type& durations)
+  template <unsigned N>
+  void print_durations_and_update_test_result(
+    const durations_type& durations,
+    test_result<N>& result)
   {
     std::cout
-      << duration_seconds_to_string(durations.duration_noexcept)
-      << "(explicitly defined 'noexcept')\n"
-      << duration_seconds_to_string(durations.duration_implicit)
-      << "(implicitly defined exception specification)\n"
-      << std::flush;
-  }
+      << "  Duration: "
+      << std::to_string(durations.duration_noexcept)
+      << " sec. (explicit 'noexcept')\n  Duration: "
+      << std::to_string(durations.duration_implicit)
+      << " sec. (implicit exception specification)"
+      << std::endl;
 
-
-  void update_test_result(test_result& result, const durations_type& durations)
-  {
-    result.sum_of_durations_noexcept += durations.duration_noexcept;
-    result.sum_of_durations_implicit += durations.duration_implicit;
-
-    if (durations.duration_noexcept < durations.duration_implicit)
-    {
-      ++result.number_of_times_noexcept_is_faster;
-    }
-    if (durations.duration_implicit < durations.duration_noexcept)
-    {
-      ++result.number_of_times_implicit_is_faster;
-    }
-  }
-
-  double divide_by_positive(const double x, const double y)
-  {
-    return x /
-      ((y > 0) ? y : std::numeric_limits<double>::denorm_min());
-  }
-
-
-  void print_conclusion(const test_result& result)
-  {
-    if (result.number_of_times_noexcept_is_faster == number_of_iterations)
-    {
-      std::cout << "So 'noexcept' seems approximately "
-        << divide_by_positive(result.sum_of_durations_implicit, result.sum_of_durations_noexcept)
-        << " x faster, for this test case.";
-    }
-    else
-    {
-      if (result.number_of_times_implicit_is_faster == number_of_iterations)
-      {
-        std::cout
-          << "So an implicitly defined exception specification seems approximately "
-          << divide_by_positive(result.sum_of_durations_noexcept, result.sum_of_durations_implicit)
-          << " x faster, for this test case.";
-      }
-      else
-      {
-        std::cout << "So it seems unclear whether 'noexcept' or implicit is faster, for this test case.";
-      }
-    }
-    std::cout << std::endl;
+    result.update_test_result(durations);
   }
 
 }
@@ -227,24 +243,18 @@ int main()
 
 
   {
-    test_result result;
-
-    print_test_case_header("inline function calls", NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS);
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result("inline function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_inline_func();
       durations.duration_implicit = implicit_except_test::test_inline_func();
-      print_durations(durations);
-      update_test_result(result, durations);
+      print_durations_and_update_test_result(durations, result);
     }
-    print_conclusion(result);
   }
   {
-    test_result result;
-
-    print_test_case_header("exported library function calls", NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS);
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS> result("exported library function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -265,15 +275,12 @@ int main()
           implicit_except_test::exported_func(false);
         }
       });
-      print_durations(durations);
-      update_test_result(result, durations);
+
+      print_durations_and_update_test_result(durations, result);
     }
-    print_conclusion(result);
   }
   {
-    test_result result;
-
-    print_test_case_header("recursive function calls", NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS);
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS> result("recursive function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -289,15 +296,11 @@ int main()
         implicit_except_test::recursive_func(number_of_func_calls);
       });
 
-      print_durations(durations);
-      update_test_result(result, durations);
+      print_durations_and_update_test_result(durations, result);
     }
-    print_conclusion(result);
   }
   {
-    test_result result;
-
-    print_test_case_header("template recursion", NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS);
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS> result("template recursion");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -313,25 +316,19 @@ int main()
         implicit_except_test::recursive_func_template<number_of_func_calls>();;
       });
 
-      print_durations(durations);
-      update_test_result(result, durations);
+      print_durations_and_update_test_result(durations, result);
     }
-    print_conclusion(result);
   }
   {
-    test_result result;
-
-    print_test_case_header("std::vector reserve", NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE);
+    test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result("std::vector<my_string> reserve");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_vector_reserve();
       durations.duration_implicit = implicit_except_test::test_vector_reserve();
-      print_durations(durations);
-      update_test_result(result, durations);
+      print_durations_and_update_test_result(durations, result);
     }
-    print_conclusion(result);
   }
   return 0;
 }
