@@ -218,6 +218,8 @@ int main()
 #ifdef NDEBUG
     << "\nNDEBUG (\"Not Debug\")"
 #endif
+    << "\nNOEXCEPT_BENCHMARK_THROW_EXCEPTION = "
+    << NOEXCEPT_BENCHMARK_THROW_EXCEPTION
     << std::endl;
 
 

@@ -45,6 +45,11 @@ limitations under the License.
 #  define NUMBER_OF_ITERATIONS 7
 #endif
 
+#ifndef NOEXCEPT_BENCHMARK_THROW_EXCEPTION
+#  define NOEXCEPT_BENCHMARK_THROW_EXCEPTION 1
+#endif
+
+
 #ifdef NDEBUG
 #  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
 #    define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 567890000
@@ -79,7 +84,11 @@ namespace noexcept_benchmark
     if (do_throw_exception)
     {
       assert(!"This function should only be called with do_throw_exception = false!");
+#if NOEXCEPT_BENCHMARK_THROW_EXCEPTION
       throw std::exception{};
+#else
+
+#endif
     }
   }
 

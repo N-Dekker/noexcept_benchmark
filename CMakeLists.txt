@@ -38,6 +38,15 @@ endif()
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+set(NOEXCEPT_BENCHMARK_THROW_EXCEPTION ON CACHE BOOL "throw_exception_if should throw std::exception{}")
+
+if(NOEXCEPT_BENCHMARK_THROW_EXCEPTION)
+  set(NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION "NOEXCEPT_BENCHMARK_THROW_EXCEPTION=1")
+else()
+  set(NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION "NOEXCEPT_BENCHMARK_THROW_EXCEPTION=0")
+endif()
+
+
 set(SHARED_LIB_SOURCE_FILES
   dummy_class.cpp
   exported_func.cpp
@@ -47,16 +56,25 @@ set(SHARED_LIB_SOURCE_FILES
 
 add_library(noexcept_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
-target_compile_definitions(noexcept_lib PRIVATE SPECIFY_NOEXCEPT=1)
+target_compile_definitions(noexcept_lib PRIVATE
+  ${NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION}
+  SPECIFY_NOEXCEPT=1
+)
 
 add_library(implicit_except_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
-target_compile_definitions(implicit_except_lib PRIVATE SPECIFY_NOEXCEPT=0)
+target_compile_definitions(implicit_except_lib PRIVATE
+  ${NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION}
+  SPECIFY_NOEXCEPT=0
+)
 
 
 add_executable(${PROJECT_NAME}
   ${PROJECT_NAME}.h
   ${PROJECT_NAME}_main.cpp)
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+  ${NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION}
+)
 
 target_link_libraries(${PROJECT_NAME}
 	noexcept_lib
