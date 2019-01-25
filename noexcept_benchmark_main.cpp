@@ -19,6 +19,7 @@ limitations under the License.
 #include <chrono>
 #include <limits>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 using namespace noexcept_benchmark;
@@ -120,12 +121,14 @@ namespace
     unsigned m_number_of_times_implicit_is_faster = 0;
     double m_sum_of_durations_noexcept = 0.0;
     double m_sum_of_durations_implicit = 0.0;
+    std::string& m_summary;
     const char* const m_test_case_name;
 
   public:
 
-    explicit test_result(const char* const test_case_name)
+    explicit test_result(std::string& summary, const char* const test_case_name)
       :
+      m_summary(summary),
       m_test_case_name{ test_case_name }
     {
       std::cout << "\n[" << test_case_name << " (N = " << N << ")]" << std::endl;
@@ -157,7 +160,10 @@ namespace
         << " sec. (implicit exception specification)\n"
         << "Tentative conclusion for this case [" << m_test_case_name << "]:\n  ";
 
-      if (m_number_of_times_noexcept_is_faster == number_of_iterations)
+      const bool is_noexcept_always_faster = m_number_of_times_noexcept_is_faster == number_of_iterations;
+      const bool is_implicit_always_faster = m_number_of_times_implicit_is_faster == number_of_iterations;
+
+      if (is_noexcept_always_faster)
       {
         std::cout
           << "Explicit 'noexcept' specifications seem approximately "
@@ -166,7 +172,7 @@ namespace
       }
       else
       {
-        if (m_number_of_times_implicit_is_faster == number_of_iterations)
+        if (is_implicit_always_faster)
         {
           std::cout
             << "Implicit exception specifications seem approximately "
@@ -180,6 +186,16 @@ namespace
         }
       }
       std::cout << std::endl;
+
+      m_summary
+        .append("For case [")
+        .append(m_test_case_name)
+        .append("]\n  ")
+        .append(
+          is_noexcept_always_faster ? "explicit 'noexcept' specifications appear faster" :
+          is_implicit_always_faster ? "implicit exception specifications appear faster" :
+          "neither implicit nor noexcept specifications always appear faster").
+        append("\n");
     }
   };
 
@@ -214,7 +230,9 @@ namespace
 
 int main()
 {
-  std::cout
+  std::ostringstream output_stringstream;
+
+  output_stringstream
     << "__FILE__ = " << __FILE__
     << "\nsizeof(void*) = " << sizeof(void*)
     << "\n__DATE__ = " << __DATE__
@@ -239,11 +257,16 @@ int main()
 #endif
     << "\nNOEXCEPT_BENCHMARK_THROW_EXCEPTION = "
     << NOEXCEPT_BENCHMARK_THROW_EXCEPTION
-    << std::endl;
+    << '\n';
 
+  std::cout << output_stringstream.str();
+
+  std::string summary{ "\nSummary:\n" };
+  summary += output_stringstream.str();
 
   {
-    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result("inline function calls");
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(
+      summary, "inline function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -254,7 +277,8 @@ int main()
     }
   }
   {
-    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS> result("exported library function calls");
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS> result(
+      summary, "exported library function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -280,7 +304,8 @@ int main()
     }
   }
   {
-    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS> result("recursive function calls");
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS> result(
+      summary, "recursive function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -300,7 +325,8 @@ int main()
     }
   }
   {
-    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS> result("template recursion");
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS> result(
+      summary, "template recursion");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -320,7 +346,8 @@ int main()
     }
   }
   {
-    test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result("std::vector<my_string> reserve");
+    test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result(
+      summary, "std::vector<my_string> reserve");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -330,5 +357,7 @@ int main()
       print_durations_and_update_test_result(durations, result);
     }
   }
+
+  std::cout << summary << std::endl;
   return 0;
 }
