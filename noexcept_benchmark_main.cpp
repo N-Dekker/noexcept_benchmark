@@ -17,6 +17,7 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
 #include <limits>
 #include <iostream>
 #include <sstream>
@@ -99,7 +100,7 @@ namespace implicit_except_test
 
 namespace
 {
-  const int number_of_iterations = NUMBER_OF_ITERATIONS;
+  const int number_of_iterations = NOEXCEPT_BENCHMARK_NUMBER_OF_ITERATIONS;
 
   struct durations_type
   {
@@ -121,23 +122,28 @@ namespace
     unsigned m_number_of_times_implicit_is_faster = 0;
     double m_sum_of_durations_noexcept = 0.0;
     double m_sum_of_durations_implicit = 0.0;
-    std::string& m_summary;
+    double m_shortest_duration_noexcept = std::numeric_limits<double>::infinity();
+    double m_shortest_duration_implicit = std::numeric_limits<double>::infinity();
     const char* const m_test_case_name;
 
   public:
 
-    explicit test_result(std::string& summary, const char* const test_case_name)
+    explicit test_result(const char* const test_case_name)
       :
-      m_summary(summary),
       m_test_case_name{ test_case_name }
     {
-      std::cout << "\n[" << test_case_name << " (N = " << N << ")]" << std::endl;
+      std::cout << "\n[" << test_case_name << " (N = " << N
+        << ")]\n  noexcept \t implicit"
+        << std::flush;
     }
 
     void update_test_result(const durations_type& durations)
     {
       m_sum_of_durations_noexcept += durations.duration_noexcept;
       m_sum_of_durations_implicit += durations.duration_implicit;
+
+      m_shortest_duration_noexcept = std::min(m_shortest_duration_noexcept, durations.duration_noexcept);
+      m_shortest_duration_implicit = std::min(m_shortest_duration_implicit, durations.duration_implicit);
 
       if (durations.duration_noexcept < durations.duration_implicit)
       {
@@ -152,50 +158,29 @@ namespace
     ~test_result()
     {
       std::cout
-        << "  Total: "
-        << std::to_string(m_sum_of_durations_noexcept)
-        << " sec. (explicit 'noexcept')\n"
-        << "  Total: "
-        << std::to_string(m_sum_of_durations_implicit)
-        << " sec. (implicit exception specification)\n"
-        << "Tentative conclusion for this case [" << m_test_case_name << "]:\n  ";
-
-      const bool is_noexcept_always_faster = m_number_of_times_noexcept_is_faster == number_of_iterations;
-      const bool is_implicit_always_faster = m_number_of_times_implicit_is_faster == number_of_iterations;
-
-      if (is_noexcept_always_faster)
-      {
-        std::cout
-          << "Explicit 'noexcept' specifications seem approximately "
-          << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
-          << " x faster.";
-      }
-      else
-      {
-        if (is_implicit_always_faster)
-        {
-          std::cout
-            << "Implicit exception specifications seem approximately "
-            << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
-            << " x faster.";
-        }
-        else
-        {
-          std::cout
-            << "It seems unclear whether noexcept or implicit specifications are faster.";
-        }
-      }
-      std::cout << std::endl;
-
-      m_summary
-        .append("For case [")
-        .append(m_test_case_name)
-        .append("]\n  ")
-        .append(
-          is_noexcept_always_faster ? "explicit 'noexcept' specifications appear faster" :
-          is_implicit_always_faster ? "implicit exception specifications appear faster" :
-          "neither implicit nor noexcept specifications always appear faster").
-        append("\n");
+        << "\nShortest duration: "
+        << m_shortest_duration_noexcept
+        << " sec. (explicit 'noexcept')"
+        << "\nShortest duration: "
+        << m_shortest_duration_implicit
+        << " sec. (implicit exception specification)"
+        << "\nSum of durations: "
+        << m_sum_of_durations_noexcept
+        << " sec. (explicit 'noexcept')"
+        << "\nSum of durations: "
+        << m_sum_of_durations_implicit
+        << " sec. (implicit exception specification)"
+        << "\nRatio sum of durations noexcept/implicit: "
+        << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
+        << "\nRatio sum of durations implicit/noexcept: "
+        << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
+        << ((m_number_of_times_implicit_is_faster == 0) ?
+          "\nIn this case, 'noexcept' specifications always appear faster." : "")
+        << ((m_number_of_times_noexcept_is_faster == 0) ?
+          "\nIn this case, implicit exception specifications always appear faster." : "")
+        << (((m_number_of_times_noexcept_is_faster > 0) && (m_number_of_times_implicit_is_faster > 0)) ?
+          "\nIn this case, neither implicit nor noexcept specifications always appear faster." : "")
+        << std::endl;
     }
   };
 
@@ -216,12 +201,11 @@ namespace
     test_result<N>& result)
   {
     std::cout
-      << "  Duration: "
-      << std::to_string(durations.duration_noexcept)
-      << " sec. (explicit 'noexcept')\n  Duration: "
-      << std::to_string(durations.duration_implicit)
-      << " sec. (implicit exception specification)"
-      << std::endl;
+      << "\n  "
+      << durations.duration_noexcept
+      << " \t "
+      << durations.duration_implicit
+      << std::flush;
 
     result.update_test_result(durations);
   }
@@ -230,10 +214,11 @@ namespace
 
 int main()
 {
-  std::ostringstream output_stringstream;
-
-  output_stringstream
-    << "__FILE__ = " << __FILE__
+  std::cout
+    << std::fixed
+    << std::setprecision(10)
+    << "The noexcept benchmark from https://github.com/N-Dekker/noexcept_benchmark"
+    << "\n__FILE__ = " << __FILE__
     << "\nsizeof(void*) = " << sizeof(void*)
     << "\n__DATE__ = " << __DATE__
     << "\n__TIME__ = " << __TIME__
@@ -255,18 +240,14 @@ int main()
 #ifdef NDEBUG
     << "\nNDEBUG (\"Not Debug\")"
 #endif
+    << "\nNOEXCEPT_BENCHMARK_NUMBER_OF_ITERATIONS = "
+    << NOEXCEPT_BENCHMARK_NUMBER_OF_ITERATIONS
     << "\nNOEXCEPT_BENCHMARK_THROW_EXCEPTION = "
     << NOEXCEPT_BENCHMARK_THROW_EXCEPTION
-    << '\n';
-
-  std::cout << output_stringstream.str();
-
-  std::string summary{ "\nSummary:\n" };
-  summary += output_stringstream.str();
-
+    << std::endl;
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(
-      summary, "inline function calls");
+      "inline function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -278,7 +259,7 @@ int main()
   }
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS> result(
-      summary, "exported library function calls");
+      "exported library function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -305,7 +286,7 @@ int main()
   }
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS> result(
-      summary, "recursive function calls");
+      "recursive function calls");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -326,7 +307,7 @@ int main()
   }
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS> result(
-      summary, "template recursion");
+      "template recursion");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -347,7 +328,7 @@ int main()
   }
   {
     test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result(
-      summary, "std::vector<my_string> reserve");
+      "std::vector<my_string> reserve");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
@@ -358,6 +339,10 @@ int main()
     }
   }
 
-  std::cout << summary << std::endl;
+  for (int i = 0; i < 80; ++i)
+  {
+    std::cout << '=';
+  }
+  std::cout << std::endl;
   return 0;
 }
