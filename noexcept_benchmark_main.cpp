@@ -103,6 +103,9 @@ namespace implicit_except_test
 namespace
 {
   const int number_of_iterations = NOEXCEPT_BENCHMARK_NUMBER_OF_ITERATIONS;
+  const std::streamsize output_precision = 10;
+  const unsigned indent_size = 4;
+  const unsigned gap_size = 3;
 
   struct durations_type
   {
@@ -135,7 +138,12 @@ namespace
       m_test_case_name{ test_case_name }
     {
       std::cout << "\n[" << test_case_name << " (N = " << N
-        << ")]\n  noexcept \t implicit"
+        << ")]\n"
+        << std::string(indent_size, ' ')
+        << "noexcept    "
+        << std::string(gap_size, ' ')
+        << "implicit    "
+        << " (durations in seconds)"
         << std::flush;
     }
 
@@ -159,19 +167,27 @@ namespace
 
     ~test_result()
     {
+      const std::string dashes(output_precision + 2, '-');
+      const std::string indent(indent_size, ' ');
+      const std::string gap(gap_size, ' ');
+
       std::cout
-        << "\nShortest duration: "
-        << m_shortest_duration_noexcept
-        << " sec. (explicit 'noexcept')"
-        << "\nShortest duration: "
-        << m_shortest_duration_implicit
-        << " sec. (implicit exception specification)"
-        << "\nSum of durations: "
+        << '\n'
+        << indent
+        << dashes
+        << gap
+        << dashes
+        << '\n'
+        << indent
         << m_sum_of_durations_noexcept
-        << " sec. (explicit 'noexcept')"
-        << "\nSum of durations: "
+        << gap
         << m_sum_of_durations_implicit
-        << " sec. (implicit exception specification)"
+        << " (sum of durations)\n"
+        << indent
+        << m_shortest_duration_noexcept
+        << gap
+        << m_shortest_duration_implicit
+        << " (shortest durations)"
         << "\nRatio sum of durations noexcept/implicit: "
         << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
         << "\nRatio sum of durations implicit/noexcept: "
@@ -203,9 +219,10 @@ namespace
     test_result<N>& result)
   {
     std::cout
-      << "\n  "
+      << '\n'
+      << std::string(indent_size, ' ')
       << durations.duration_noexcept
-      << " \t "
+      << std::string(gap_size, ' ')
       << durations.duration_implicit
       << std::flush;
 
@@ -218,7 +235,7 @@ int main()
 {
   std::cout
     << std::fixed
-    << std::setprecision(10)
+    << std::setprecision(output_precision)
     << "The noexcept benchmark from https://github.com/N-Dekker/noexcept_benchmark"
     << "\n__FILE__ = " << __FILE__
     << "\nsizeof(void*) = " << sizeof(void*)
@@ -342,10 +359,6 @@ int main()
     }
   }
 
-  for (int i = 0; i < 80; ++i)
-  {
-    std::cout << '=';
-  }
-  std::cout << std::endl;
+  std::cout << std::string(80, '=') << std::endl;
   return 0;
 }
