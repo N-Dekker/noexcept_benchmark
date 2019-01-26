@@ -7,3 +7,9 @@ Related to:
 [Microsoft Developer Community - C++11 noexcept implementation still a performance loss with VS2017?](https://developercommunity.visualstudio.com/content/problem/425370/c11-noexcept-implementation-still-a-performance-lo.html)
 
 [Terry Mahaffey - Please, Please Help the Compiler](https://github.com/TriangleCppDevelopersGroup/TerryMahaffeyCppTalk/blob/master/compiler.pptm)
+
+[Scott Meyers - Declare functions noexcept whenever possible?]
+(https://scottmeyers.blogspot.com/2014/03/declare-functions-noexcept-whenever.html)
+
+[Stack Overflow - noexcept, stack unwinding and performance]
+(https://stackoverflow.com/questions/26079903/noexcept-stack-unwinding-and-performance)
