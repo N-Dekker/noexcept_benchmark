@@ -32,6 +32,7 @@ namespace noexcept_test
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception) noexcept;
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_vector_reserve();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void catching_func() noexcept;
 
   class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
   {
@@ -49,6 +50,7 @@ namespace noexcept_test
       recursive_func(number_of_func_calls);
     }
   }
+
 
   template <unsigned number_of_func_calls>
   void recursive_func_template() noexcept
@@ -69,6 +71,7 @@ namespace implicit_except_test
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_vector_reserve();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void catching_func();
 
   class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
   {
@@ -77,20 +80,8 @@ namespace implicit_except_test
     ~dummy_class();
   };
 
-  template <unsigned number_of_func_calls>
-  void recursive_func_template()
-  {
-    dummy_class dummy;
-    recursive_func_template<number_of_func_calls - 1>();
-  }
 
-  template <>
-  void recursive_func_template<0>()
-  {
-  }
-
-
-  void recursive_func(unsigned short number_of_func_calls)
+  void recursive_func(unsigned short number_of_func_calls) // No noexcept
   {
     if (--number_of_func_calls > 0)
     {
@@ -98,6 +89,19 @@ namespace implicit_except_test
       recursive_func(number_of_func_calls);
     }
   }
+
+  template <unsigned number_of_func_calls>
+  void recursive_func_template() // No noexcept
+  {
+    dummy_class dummy;
+    recursive_func_template<number_of_func_calls - 1>();
+  }
+
+  template <>
+  void recursive_func_template<0>() // No noexcept
+  {
+  }
+
 }
 
 namespace
@@ -320,6 +324,25 @@ int main()
         []
       {
         implicit_except_test::recursive_func(number_of_func_calls);
+      });
+
+      print_durations_and_update_test_result(durations, result);
+    }
+  }
+  {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS> result(
+      "catching function calls");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      const auto durations = profile_func_calls(
+        []
+      {
+        noexcept_test::catching_func();
+      },
+        []
+      {
+        implicit_except_test::catching_func();
       });
 
       print_durations_and_update_test_result(durations, result);

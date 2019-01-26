@@ -8,8 +8,6 @@ Related to:
 
 [Terry Mahaffey - Please, Please Help the Compiler](https://github.com/TriangleCppDevelopersGroup/TerryMahaffeyCppTalk/blob/master/compiler.pptm)
 
-[Scott Meyers - Declare functions noexcept whenever possible?]
-(https://scottmeyers.blogspot.com/2014/03/declare-functions-noexcept-whenever.html)
+[Scott Meyers - Declare functions noexcept whenever possible?](https://scottmeyers.blogspot.com/2014/03/declare-functions-noexcept-whenever.html)
 
-[Stack Overflow - noexcept, stack unwinding and performance]
-(https://stackoverflow.com/questions/26079903/noexcept-stack-unwinding-and-performance)
+[Stack Overflow - noexcept, stack unwinding and performance](https://stackoverflow.com/questions/26079903/noexcept-stack-unwinding-and-performance)

@@ -19,6 +19,7 @@ limitations under the License.
 
 #include <cassert>
 #include <chrono>
+#include <ctime>
 #include <exception>
 
 
@@ -61,8 +62,9 @@ limitations under the License.
 #    define NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE 987654
 #  endif
 #  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS
-// Note: On Windows 10, x64, stack overflow occurred with N = 20000
-#    define NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS 12000
+// Note: On Windows 10, x64, stack overflow occurred with N = 15000
+#    define NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS 13000
+#    define NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS 12000
 #  endif
 #  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS
 // Avoids gcc 4.8.4 error: template instantiation depth exceeds maximum of 900
@@ -90,6 +92,12 @@ namespace noexcept_benchmark
 
 #endif
     }
+  }
+
+
+  inline void throw_exception_if_time_is_zero()
+  {
+    throw_exception_if(std::time(nullptr) == 0);
   }
 
 

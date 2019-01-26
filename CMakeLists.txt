@@ -48,6 +48,7 @@ endif()
 
 
 set(SHARED_LIB_SOURCE_FILES
+  catching_func.cpp
   dummy_class.cpp
   exported_func.cpp
   inline_func_test.cpp

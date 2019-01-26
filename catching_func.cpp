@@ -17,33 +17,38 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 
 #include <iostream>
-#include <exception>
 
-namespace LIBRARY_NAMESPACE
+namespace
 {
-  class NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT dummy_class
-  {
-  public:
-    dummy_class() OPTIONAL_EXCEPTION_SPECIFIER;
-    ~dummy_class();
-  };
-
-  
-  dummy_class::dummy_class() OPTIONAL_EXCEPTION_SPECIFIER
-  {
-    noexcept_benchmark::throw_exception_if_time_is_zero();
-  }
-
-  dummy_class::~dummy_class()
+  void catching_recursive_func(unsigned short number_of_func_calls) OPTIONAL_EXCEPTION_SPECIFIER
   {
     try
     {
-      std::cout.flush();
+      if (--number_of_func_calls > 0)
+      {
+        noexcept_benchmark::throw_exception_if_time_is_zero();
+        catching_recursive_func(number_of_func_calls);
+      }
     }
     catch (const std::exception&)
     {
-      // No exception should leave the destructor!
+      std::cout << number_of_func_calls << std::endl;
     }
   }
+}
 
+
+namespace LIBRARY_NAMESPACE
+{
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void catching_func() OPTIONAL_EXCEPTION_SPECIFIER
+  {
+    try
+    {
+      catching_recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS);
+    }
+    catch (const std::exception&)
+    {
+      std::cout << __FUNCTION__ << std::endl;
+    }
+  }
 }
