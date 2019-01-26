@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 #include "noexcept_benchmark.h"
+
 #include <algorithm>
 #include <chrono>
+#include <climits>
 #include <iomanip>
-#include <limits>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 
@@ -220,6 +222,7 @@ int main()
     << "The noexcept benchmark from https://github.com/N-Dekker/noexcept_benchmark"
     << "\n__FILE__ = " << __FILE__
     << "\nsizeof(void*) = " << sizeof(void*)
+    << " (" << CHAR_BIT * sizeof(void*) << "-bit)"
     << "\n__DATE__ = " << __DATE__
     << "\n__TIME__ = " << __TIME__
 #ifdef __VERSION__
