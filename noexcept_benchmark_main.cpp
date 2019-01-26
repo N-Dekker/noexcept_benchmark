@@ -205,11 +205,12 @@ namespace
         << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
         << "\nRatio sum of durations implicit/noexcept: "
         << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
-        << ((m_number_of_times_implicit_is_faster == 0) ?
+        << ((m_number_of_times_noexcept_is_faster == number_of_iterations) ?
           "\nIn this case, 'noexcept' specifications always appear faster." : "")
-        << ((m_number_of_times_noexcept_is_faster == 0) ?
+        << ((m_number_of_times_implicit_is_faster == number_of_iterations) ?
           "\nIn this case, implicit exception specifications always appear faster." : "")
-        << (((m_number_of_times_noexcept_is_faster > 0) && (m_number_of_times_implicit_is_faster > 0)) ?
+        << (((m_number_of_times_noexcept_is_faster < number_of_iterations) &&
+            (m_number_of_times_implicit_is_faster < number_of_iterations)) ?
           "\nIn this case, neither implicit nor noexcept specifications always appear faster." : "")
         << std::endl;
     }
