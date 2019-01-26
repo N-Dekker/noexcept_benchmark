@@ -124,6 +124,11 @@ namespace
       ((y > 0) ? y : std::numeric_limits<double>::denorm_min());
   }
 
+  char get_comparison_char(const double x, const double y)
+  {
+    return (x < y) ? '<' : (x > y) ? '>' : (x == y) ? '=' : ' ';
+  }
+
   template <unsigned N>
   class test_result
   {
@@ -184,12 +189,16 @@ namespace
         << '\n'
         << indent
         << m_sum_of_durations_noexcept
-        << gap
+        << ' '
+        << get_comparison_char(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
+        << ' '
         << m_sum_of_durations_implicit
         << " (sum of durations)\n"
         << indent
         << m_shortest_duration_noexcept
-        << gap
+        << ' '
+        << get_comparison_char(m_shortest_duration_noexcept, m_shortest_duration_implicit)
+        << ' '
         << m_shortest_duration_implicit
         << " (shortest durations)"
         << "\nRatio sum of durations noexcept/implicit: "
@@ -226,7 +235,9 @@ namespace
       << '\n'
       << std::string(indent_size, ' ')
       << durations.duration_noexcept
-      << std::string(gap_size, ' ')
+      << ' '
+      << get_comparison_char(durations.duration_noexcept, durations.duration_implicit)
+      << ' '
       << durations.duration_implicit
       << std::flush;
 
