@@ -146,7 +146,26 @@ namespace
       :
       m_test_case_name{ test_case_name }
     {
-      std::cout << "\n[" << test_case_name << " (N = " << N
+      std::cout 
+        << "\n"
+        << "["
+#ifdef _MSC_VER
+        << "MSVC "
+        << (CHAR_BIT * sizeof(void*))
+        << "-bit"
+#endif
+#ifdef __linux__
+        << "Linux "
+#endif
+#ifdef __APPLE__
+        << "Apple "
+#endif
+#ifdef __clang__
+        << "Clang"
+#elif defined(__GNUC__)
+        << "GCC"
+#endif
+        << "][" << test_case_name << " (N = " << N
         << ")]\n"
         << std::string(indent_size, ' ')
         << "noexcept    "
