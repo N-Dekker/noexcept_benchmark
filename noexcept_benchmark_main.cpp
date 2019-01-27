@@ -30,9 +30,10 @@ using namespace noexcept_benchmark;
 namespace noexcept_test
 {
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception) noexcept;
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void catching_func() noexcept;
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inc_and_dec() noexcept;
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_vector_reserve();
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void catching_func() noexcept;
 
   class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
   {
@@ -75,10 +76,11 @@ namespace noexcept_test
 
 namespace implicit_except_test
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void exported_func(bool do_throw_exception);  // No noexcept
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void catching_func();  // No noexcept
+  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void test_inc_and_dec();  // No noexcept
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_inline_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT double test_vector_reserve();
-  NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT void catching_func();
 
   class NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT dummy_class
   {
@@ -417,7 +419,24 @@ int main()
       },
         []
       {
-        implicit_except_test::recursive_func_template<number_of_func_calls>();;
+        implicit_except_test::recursive_func_template<number_of_func_calls>();
+      }));
+    }
+  }
+  {
+    test_result<NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS> result(
+      "inc `++` and dec `--`");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      update_test_result_and_print_durations(result, profile_func_calls(
+        []
+      {
+        noexcept_test::test_inc_and_dec();
+      },
+        []
+      {
+        implicit_except_test::test_inc_and_dec();
       }));
     }
   }

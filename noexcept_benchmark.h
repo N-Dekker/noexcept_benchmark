@@ -70,6 +70,9 @@ limitations under the License.
 // Avoids gcc 4.8.4 error: template instantiation depth exceeds maximum of 900
 #    define NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS 899
 #  endif
+#  ifndef NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS
+#    define NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS 6543210
+#  endif
 #else
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 42
 #  define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 42
