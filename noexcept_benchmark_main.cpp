@@ -107,9 +107,11 @@ namespace implicit_except_test
 namespace
 {
   const int number_of_iterations = NOEXCEPT_BENCHMARK_NUMBER_OF_ITERATIONS;
-  const std::streamsize output_precision = 10;
-  const unsigned indent_size = 4;
-  const unsigned gap_size = 3;
+  const std::streamsize output_precision = 8;
+
+  const unsigned column_gap_size = 2;
+  const std::string column_gap(column_gap_size, ' ');
+  const std::string indent(4, ' ');
 
   struct durations_type
   {
@@ -167,11 +169,14 @@ namespace
 #endif
         << "][" << test_case_name << " (N = " << N
         << ")]\n"
-        << std::string(indent_size, ' ')
-        << "noexcept    "
-        << std::string(gap_size, ' ')
-        << "implicit    "
-        << " (durations in seconds)"
+        << indent
+        << "noexcept"
+        << std::string(output_precision + 3 - sizeof("noexcept"), ' ')
+        << std::string(2 * column_gap_size + 1, ' ')
+        << "implicit"
+        << std::string(output_precision + 3 - sizeof("implicit"), ' ')
+        << column_gap
+        << "(durations in seconds)"
         << std::flush;
     }
 
@@ -196,30 +201,30 @@ namespace
     ~test_result()
     {
       const std::string dashes(output_precision + 2, '-');
-      const std::string indent(indent_size, ' ');
-      const std::string gap(gap_size, ' ');
 
       std::cout
         << '\n'
         << indent
         << dashes
-        << gap
+        << std::string(2 * column_gap_size + 1, ' ')
         << dashes
         << '\n'
         << indent
         << m_sum_of_durations_noexcept
-        << ' '
+        << column_gap
         << get_comparison_char(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
-        << ' '
+        << column_gap
         << m_sum_of_durations_implicit
-        << " (sum of durations)\n"
+        << column_gap
+        << "(sum of durations)\n"
         << indent
         << m_shortest_duration_noexcept
-        << ' '
+        << column_gap
         << get_comparison_char(m_shortest_duration_noexcept, m_shortest_duration_implicit)
-        << ' '
+        << column_gap
         << m_shortest_duration_implicit
-        << " (shortest durations)"
+        << column_gap
+        << "(shortest durations)"
         << "\nRatio sum of durations noexcept/implicit: "
         << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
         << "\nRatio sum of durations implicit/noexcept: "
@@ -253,11 +258,11 @@ namespace
   {
     std::cout
       << '\n'
-      << std::string(indent_size, ' ')
+      << indent
       << durations.duration_noexcept
-      << ' '
+      << column_gap
       << get_comparison_char(durations.duration_noexcept, durations.duration_implicit)
-      << ' '
+      << column_gap
       << durations.duration_implicit
       << std::flush;
 
