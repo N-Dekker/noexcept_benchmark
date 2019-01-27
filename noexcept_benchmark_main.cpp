@@ -46,8 +46,11 @@ namespace noexcept_test
   {
     if (--number_of_func_calls > 0)
     {
-      dummy_class dummy;
+      dummy_class dummy1;
+      dummy_class dummy2;
       recursive_func(number_of_func_calls);
+      dummy_class dummy3;
+      dummy_class dummy4;
     }
   }
 
@@ -55,8 +58,11 @@ namespace noexcept_test
   template <unsigned number_of_func_calls>
   void recursive_func_template() noexcept
   {
-    dummy_class dummy;
+    dummy_class dummy1;
+    dummy_class dummy2;
     recursive_func_template<number_of_func_calls - 1>();
+    dummy_class dummy3;
+    dummy_class dummy4;
   }
 
   template <>
@@ -86,16 +92,22 @@ namespace implicit_except_test
   {
     if (--number_of_func_calls > 0)
     {
-      dummy_class dummy;
+      dummy_class dummy1;
+      dummy_class dummy2;
       recursive_func(number_of_func_calls);
+      dummy_class dummy3;
+      dummy_class dummy4;
     }
   }
 
   template <unsigned number_of_func_calls>
   void recursive_func_template() // No noexcept
   {
-    dummy_class dummy;
+    dummy_class dummy1;
+    dummy_class dummy2;
     recursive_func_template<number_of_func_calls - 1>();
+    dummy_class dummy3;
+    dummy_class dummy4;
   }
 
   template <>
