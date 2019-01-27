@@ -354,16 +354,20 @@ int main()
       update_test_result_and_print_durations(result, profile_func_calls(
         []
       {
+        volatile bool do_throw_exception = noexcept_benchmark::get_false();
+
         for (int i = 0; i < number_of_func_calls; ++i)
         {
-          noexcept_test::exported_func(false);
+          noexcept_test::exported_func(do_throw_exception);
         }
       },
         []
       {
+        volatile bool do_throw_exception = noexcept_benchmark::get_false();
+
         for (int i = 0; i < number_of_func_calls; ++i)
         {
-          implicit_except_test::exported_func(false);
+          implicit_except_test::exported_func(do_throw_exception);
         }
       }));
     }

@@ -20,9 +20,9 @@ limitations under the License.
 
 namespace
 {
-  void func() OPTIONAL_EXCEPTION_SPECIFIER
+  void func(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
-    noexcept_benchmark::throw_exception_if_time_is_zero();
+    noexcept_benchmark::throw_exception_if(do_throw_exception);
   }
 
 
@@ -30,9 +30,12 @@ namespace
   {
     try
     {
+      // The compiler cannot assume that this bool is always false, even though it is!
+      volatile bool volatile_bool = noexcept_benchmark::get_false();
+
       if (--number_of_func_calls > 0)
       {
-        func();
+        func(volatile_bool);
         catching_recursive_func(number_of_func_calls);
       }
     }

@@ -31,7 +31,7 @@ namespace LIBRARY_NAMESPACE
   
   dummy_class::dummy_class() OPTIONAL_EXCEPTION_SPECIFIER
   {
-    noexcept_benchmark::throw_exception_if_time_is_zero();
+    noexcept_benchmark::throw_exception_if(noexcept_benchmark::get_false());
   }
 
   dummy_class::~dummy_class()

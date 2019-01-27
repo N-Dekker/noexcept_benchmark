@@ -36,7 +36,7 @@ namespace LIBRARY_NAMESPACE
     int value = 0;
 
     // The compiler cannot assume that this bool is always false, even though it is!
-    volatile bool volatile_bool = std::time(nullptr) == 0;
+    volatile bool volatile_bool = noexcept_benchmark::get_false();
 
     try
     {

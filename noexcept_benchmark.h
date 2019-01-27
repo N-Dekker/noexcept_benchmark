@@ -96,9 +96,11 @@ namespace noexcept_benchmark
   }
 
 
-  inline void throw_exception_if_time_is_zero()
+  inline bool get_false()
   {
-    throw_exception_if(std::time(nullptr) == 0);
+    // The compiler may not assume that std::time returns non-zero,
+    // but in practie, it always does!
+    return std::time(nullptr) == 0;
   }
 
 
