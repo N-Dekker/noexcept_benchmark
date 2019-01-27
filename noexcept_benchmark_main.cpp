@@ -64,7 +64,8 @@ namespace noexcept_test
   {
   }
 
-}
+}  // End of namespace noexcept_test
+
 
 namespace implicit_except_test
 {
@@ -102,7 +103,8 @@ namespace implicit_except_test
   {
   }
 
-}
+}  // End of namespace implicit_except_test
+
 
 namespace
 {
@@ -167,7 +169,13 @@ namespace
 #elif defined(__GNUC__)
         << "GCC"
 #endif
-        << "][" << test_case_name << " (N = " << N
+        << "]"
+#if NOEXCEPT_BENCHMARK_THROW_EXCEPTION
+        << "[`throw` included]"
+#else
+        << "[`throw` excluded]"
+#endif
+        << "[" << test_case_name << " (N = " << N
         << ")]\n"
         << indent
         << "noexcept"
@@ -304,6 +312,11 @@ int main()
     << NOEXCEPT_BENCHMARK_NUMBER_OF_ITERATIONS
     << "\nNOEXCEPT_BENCHMARK_THROW_EXCEPTION = "
     << NOEXCEPT_BENCHMARK_THROW_EXCEPTION
+#if NOEXCEPT_BENCHMARK_THROW_EXCEPTION
+    << " (`throw exception{}` included by #if)"
+#else
+    << " (`throw exception{}` excluded by #if)"
+#endif
     << std::endl;
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(

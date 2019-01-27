@@ -88,8 +88,6 @@ namespace noexcept_benchmark
       assert(!"This function should only be called with do_throw_exception = false!");
 #if NOEXCEPT_BENCHMARK_THROW_EXCEPTION
       throw std::exception{};
-#else
-
 #endif
     }
   }
