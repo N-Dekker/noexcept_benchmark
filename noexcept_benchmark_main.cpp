@@ -272,10 +272,11 @@ namespace
     
 
   template <unsigned N>
-  void print_durations_and_update_test_result(
-    const durations_type& durations,
-    test_result<N>& result)
+  void update_test_result_and_print_durations(
+    test_result<N>& result,
+    const durations_type& durations)
   {
+    result.update_test_result(durations);
     std::cout
       << '\n'
       << indent
@@ -285,8 +286,6 @@ namespace
       << column_gap
       << durations.duration_implicit
       << std::flush;
-
-    result.update_test_result(durations);
   }
 
 }
@@ -339,7 +338,7 @@ int main()
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_inline_func();
       durations.duration_implicit = implicit_except_test::test_inline_func();
-      print_durations_and_update_test_result(durations, result);
+      update_test_result_and_print_durations(result, durations);
     }
   }
   {
@@ -350,7 +349,7 @@ int main()
     {
       enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS };
 
-      const auto durations = profile_func_calls(
+      update_test_result_and_print_durations(result, profile_func_calls(
         []
       {
         for (int i = 0; i < number_of_func_calls; ++i)
@@ -364,9 +363,7 @@ int main()
         {
           implicit_except_test::exported_func(false);
         }
-      });
-
-      print_durations_and_update_test_result(durations, result);
+      }));
     }
   }
   {
@@ -377,7 +374,7 @@ int main()
     {
       enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
 
-      const auto durations = profile_func_calls(
+      update_test_result_and_print_durations(result, profile_func_calls(
         []
       {
         noexcept_test::recursive_func(number_of_func_calls);
@@ -385,9 +382,7 @@ int main()
         []
       {
         implicit_except_test::recursive_func(number_of_func_calls);
-      });
-
-      print_durations_and_update_test_result(durations, result);
+      }));
     }
   }
   {
@@ -396,7 +391,7 @@ int main()
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
-      const auto durations = profile_func_calls(
+      update_test_result_and_print_durations(result, profile_func_calls(
         []
       {
         noexcept_test::catching_func();
@@ -404,9 +399,7 @@ int main()
         []
       {
         implicit_except_test::catching_func();
-      });
-
-      print_durations_and_update_test_result(durations, result);
+      }));
     }
   }
   {
@@ -417,7 +410,7 @@ int main()
     {
       enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS };
 
-      const auto durations = profile_func_calls(
+      update_test_result_and_print_durations(result, profile_func_calls(
         []
       {
         noexcept_test::recursive_func_template<number_of_func_calls>();
@@ -425,9 +418,7 @@ int main()
         []
       {
         implicit_except_test::recursive_func_template<number_of_func_calls>();;
-      });
-
-      print_durations_and_update_test_result(durations, result);
+      }));
     }
   }
   {
@@ -439,7 +430,7 @@ int main()
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_vector_reserve();
       durations.duration_implicit = implicit_except_test::test_vector_reserve();
-      print_durations_and_update_test_result(durations, result);
+      update_test_result_and_print_durations(result, durations);
     }
   }
 
