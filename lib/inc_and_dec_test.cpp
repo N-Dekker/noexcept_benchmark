@@ -17,12 +17,13 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 
 #include <iostream>
+#include <ctime>
 
 namespace
 {
-  void func() OPTIONAL_EXCEPTION_SPECIFIER
+  void func(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
-    noexcept_benchmark::throw_exception_if_time_is_zero();
+    noexcept_benchmark::throw_exception_if(do_throw_exception);
   }
 }
 
@@ -34,12 +35,16 @@ namespace LIBRARY_NAMESPACE
     const int number_of_func_calls = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS;
     int value = 0;
 
+    // The compiler cannot assume that this bool is always false, even though it is!
+    volatile bool volatile_bool = std::time(nullptr) == 0;
+
     try
     {
       for (int i = 0; i < number_of_func_calls; ++i)
       {
+        const bool do_throw_exception = volatile_bool;
         ++value;
-        func();
+        func(do_throw_exception);
         --value;
       }
     }
