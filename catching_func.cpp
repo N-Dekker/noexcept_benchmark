@@ -20,13 +20,19 @@ limitations under the License.
 
 namespace
 {
+  void func() OPTIONAL_EXCEPTION_SPECIFIER
+  {
+    noexcept_benchmark::throw_exception_if_time_is_zero();
+  }
+
+
   void catching_recursive_func(unsigned short number_of_func_calls) OPTIONAL_EXCEPTION_SPECIFIER
   {
     try
     {
       if (--number_of_func_calls > 0)
       {
-        noexcept_benchmark::throw_exception_if_time_is_zero();
+        func();
         catching_recursive_func(number_of_func_calls);
       }
     }
