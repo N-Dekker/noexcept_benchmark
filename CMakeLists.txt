@@ -46,14 +46,7 @@ else()
   set(NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION "NOEXCEPT_BENCHMARK_THROW_EXCEPTION=0")
 endif()
 
-
-set(SHARED_LIB_SOURCE_FILES
-  catching_func.cpp
-  dummy_class.cpp
-  exported_func.cpp
-  inline_func_test.cpp
-  vector_reserve_test.cpp
-)
+file(GLOB SHARED_LIB_SOURCE_FILES lib/*.cpp)
 
 add_library(noexcept_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
@@ -61,6 +54,7 @@ target_compile_definitions(noexcept_lib PRIVATE
   ${NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION}
   SPECIFY_NOEXCEPT=1
 )
+target_include_directories(noexcept_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(implicit_except_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
@@ -68,7 +62,7 @@ target_compile_definitions(implicit_except_lib PRIVATE
   ${NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION}
   SPECIFY_NOEXCEPT=0
 )
-
+target_include_directories(implicit_except_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${PROJECT_NAME}
   ${PROJECT_NAME}.h
