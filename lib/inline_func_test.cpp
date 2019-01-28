@@ -26,7 +26,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIBRARY_NAMESPACE::test_inline_func()
+double LIB_NAME::test_inline_func()
 {
   enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
 

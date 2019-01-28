@@ -29,7 +29,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIBRARY_NAMESPACE::test_inc_and_dec()
+double LIB_NAME::test_inc_and_dec()
 {
   return noexcept_benchmark::profile_func_call([]
   {

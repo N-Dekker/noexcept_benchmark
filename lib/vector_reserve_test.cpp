@@ -86,7 +86,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIBRARY_NAMESPACE::test_vector_reserve()
+double LIB_NAME::test_vector_reserve()
 {
   std::vector<my_string> strings(NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE, my_string(1));
 

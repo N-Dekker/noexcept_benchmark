@@ -58,7 +58,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIBRARY_NAMESPACE::test_stack_unwinding()
+double LIB_NAME::test_stack_unwinding()
 {
   return noexcept_benchmark::profile_func_call([]
   {

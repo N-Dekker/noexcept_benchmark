@@ -18,7 +18,7 @@ limitations under the License.
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-void LIBRARY_NAMESPACE::exported_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
+void LIB_NAME::exported_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
 {
   noexcept_benchmark::throw_exception_if(do_throw_exception);
 }

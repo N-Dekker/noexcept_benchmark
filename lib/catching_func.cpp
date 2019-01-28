@@ -48,7 +48,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIBRARY_NAMESPACE::catching_func()
+double LIB_NAME::catching_func()
 {
   return noexcept_benchmark::profile_func_call([]
   {
