@@ -16,6 +16,7 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 
+#include <algorithm>
 #include <vector>
 #include <cstring>
 
@@ -30,11 +31,17 @@ namespace
     char* m_data = nullptr;
   public:
     my_string() = default;
+
     explicit my_string(std::size_t arg)
       :
-      m_data{ (arg == 0) ? nullptr : new char[arg + 1]()}
+      m_data{ (arg == 0) ? nullptr : new char[arg + 1] }
     {
-
+      if (arg > 0)
+      {
+        // Ensure that strlen(m_data) == arg, so that my_string 'knows' its buffer size.
+        std::fill_n(m_data, arg, ' ');
+        m_data[arg] = '\0';
+      }
     }
 
     my_string(const my_string& arg)
