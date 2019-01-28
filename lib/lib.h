@@ -29,7 +29,7 @@ limitations under the License.
 namespace NOEXCEPT_BENCHMARK_LIB_NAMESPACE
 {
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void exported_func(bool do_throw_exception) NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void catching_func() NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
+    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double catching_func();
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inc_and_dec();
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func();
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve();

@@ -49,15 +49,18 @@ namespace
 
 namespace LIBRARY_NAMESPACE
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void catching_func() OPTIONAL_EXCEPTION_SPECIFIER
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double catching_func()
   {
-    try
+    return noexcept_benchmark::profile_func_call([]
     {
-      catching_recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS);
-    }
-    catch (const std::exception&)
-    {
-      std::cout << __FUNCTION__ << std::endl;
-    }
+      try
+      {
+        catching_recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS);
+      }
+      catch (const std::exception&)
+      {
+        std::cout << __FUNCTION__ << std::endl;
+      }
+    });
   }
 }

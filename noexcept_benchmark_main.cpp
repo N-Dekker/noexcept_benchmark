@@ -306,15 +306,10 @@ int main()
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
-      update_test_result_and_print_durations(result, profile_func_calls(
-        []
-      {
-        noexcept_test::catching_func();
-      },
-        []
-      {
-        implicit_test::catching_func();
-      }));
+      durations_type durations;
+      durations.duration_noexcept = noexcept_test::catching_func();
+      durations.duration_implicit = implicit_test::catching_func();
+      update_test_result_and_print_durations(result, durations);
     }
   }
   {
