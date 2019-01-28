@@ -47,20 +47,18 @@ namespace
 }
 
 
-namespace LIBRARY_NAMESPACE
+NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+double LIBRARY_NAMESPACE::catching_func()
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double catching_func()
+  return noexcept_benchmark::profile_func_call([]
   {
-    return noexcept_benchmark::profile_func_call([]
+    try
     {
-      try
-      {
-        catching_recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS);
-      }
-      catch (const std::exception&)
-      {
-        std::cout << __FUNCTION__ << std::endl;
-      }
-    });
-  }
+      catching_recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS);
+    }
+    catch (const std::exception&)
+    {
+      std::cout << __FUNCTION__ << std::endl;
+    }
+  });
 }

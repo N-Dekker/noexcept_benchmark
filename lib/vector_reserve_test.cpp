@@ -77,15 +77,14 @@ namespace
 
 }
 
-namespace LIBRARY_NAMESPACE
-{
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve()
-  {
-    std::vector<my_string> strings(NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE, my_string(1));
 
-    return noexcept_benchmark::profile_func_call([&strings]
-    {
-      strings.reserve(strings.capacity() + 1);
-    });
-  }
+NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+double LIBRARY_NAMESPACE::test_vector_reserve()
+{
+  std::vector<my_string> strings(NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE, my_string(1));
+
+  return noexcept_benchmark::profile_func_call([&strings]
+  {
+    strings.reserve(strings.capacity() + 1);
+  });
 }

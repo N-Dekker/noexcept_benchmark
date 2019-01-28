@@ -25,18 +25,16 @@ namespace
 }
 
 
-namespace LIBRARY_NAMESPACE
+NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+double LIBRARY_NAMESPACE::test_inline_func()
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func()
-  {
-    enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
+  enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
 
-    return noexcept_benchmark::profile_func_call([]
+  return noexcept_benchmark::profile_func_call([]
+  {
+    for (int i = 0; i < number_of_func_calls; ++i)
     {
-      for (int i = 0; i < number_of_func_calls; ++i)
-      {
-        inline_func(false);
-      }
-    });
-  }
+      inline_func(false);
+    }
+  });
 }

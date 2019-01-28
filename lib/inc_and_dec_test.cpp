@@ -28,35 +28,33 @@ namespace
 }
 
 
-namespace LIBRARY_NAMESPACE
+NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+double LIBRARY_NAMESPACE::test_inc_and_dec()
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inc_and_dec()
+  return noexcept_benchmark::profile_func_call([]
   {
-    return noexcept_benchmark::profile_func_call([]
+    const int number_of_func_calls = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS;
+    int value = 0;
+
+    // The compiler cannot assume that this bool is always false, even though it is!
+    volatile bool volatile_bool = noexcept_benchmark::get_false();
+
+    try
     {
-      const int number_of_func_calls = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS;
-      int value = 0;
-
-      // The compiler cannot assume that this bool is always false, even though it is!
-      volatile bool volatile_bool = noexcept_benchmark::get_false();
-
-      try
+      for (int i = 0; i < number_of_func_calls; ++i)
       {
-        for (int i = 0; i < number_of_func_calls; ++i)
-        {
-          const bool do_throw_exception = volatile_bool;
-          ++value;
-          func(do_throw_exception);
-          --value;
-        }
+        const bool do_throw_exception = volatile_bool;
+        ++value;
+        func(do_throw_exception);
+        --value;
       }
-      catch (const std::exception&)
-      {
-      }
-      if (value != 0)
-      {
-        std::cout << value << std::endl;
-      }
-    });
-  }
+    }
+    catch (const std::exception&)
+    {
+    }
+    if (value != 0)
+    {
+      std::cout << value << std::endl;
+    }
+  });
 }

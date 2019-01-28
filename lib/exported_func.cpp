@@ -16,10 +16,9 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 
-namespace LIBRARY_NAMESPACE
+
+NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+void LIBRARY_NAMESPACE::exported_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
 {
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void exported_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
-  {
-    noexcept_benchmark::throw_exception_if(do_throw_exception);
-  }
+  noexcept_benchmark::throw_exception_if(do_throw_exception);
 }
