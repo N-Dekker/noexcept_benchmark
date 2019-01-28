@@ -9,26 +9,32 @@ jobs:
       cd build32
       cmake .. -G "Visual Studio 15 2017"
       MSBuild.exe ..\build32\noexcept_benchmark.sln  /p:Platform="Win32"
-      ..\build32\Release\noexcept_benchmark.exe
       cd ..
       mkdir build32_no_throw
       cd build32_no_throw
       cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF .. -G "Visual Studio 15 2017"
       MSBuild.exe ..\build32_no_throw\noexcept_benchmark.sln  /p:Platform="Win32"
-      ..\build32_no_throw\Release\noexcept_benchmark.exe
       cd ..
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       mkdir build64
       cd build64
       cmake .. -G "Visual Studio 15 2017 Win64"
       MSBuild.exe ..\build64\noexcept_benchmark.sln
-      ..\build64\Release\noexcept_benchmark.exe
       cd ..
       mkdir build64_no_throw
       cd build64_no_throw
       cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF .. -G "Visual Studio 15 2017 Win64"
       MSBuild.exe ..\build64_no_throw\noexcept_benchmark.sln
-      ..\build64_no_throw\Release\noexcept_benchmark.exe
+      cd ..
+    displayName: VS build, x86 (32-bit) and x64 (64-bit)
+  - script: |
+      .\build32\Release\noexcept_benchmark.exe
+      .\build32_no_throw\Release\noexcept_benchmark.exe
+    displayName: Benchmark results 32-bit (both including and excluding `throw exception{}`)
+  - script: |
+      .\build64\Release\noexcept_benchmark.exe
+      .\build64_no_throw\Release\noexcept_benchmark.exe
+    displayName: Benchmark results 64-bit (both including and excluding `throw exception{}`)
 
 - job: Ubuntu1604
   pool:
@@ -38,12 +44,18 @@ jobs:
       mkdir build
       cd build
       cmake ..
-      make && ../build/noexcept_benchmark
+      make
       cd ..
       mkdir build_no_throw
       cd build_no_throw
       cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF ..
-      make && ../build_no_throw/noexcept_benchmark
+      make
+      cd ..
+    displayName: GCC build
+  - script: |
+      ./build/noexcept_benchmark
+      ./build_no_throw/noexcept_benchmark
+    displayName: Benchmark results (both including and excluding `throw exception{}`)
 
 - job: macOS
   pool:
@@ -53,9 +65,16 @@ jobs:
       mkdir build
       cd build
       cmake ..
-      make && ../build/noexcept_benchmark
+      make
       cd ..
       mkdir build_no_throw
       cd build_no_throw
       cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF ..
-      make && ../build_no_throw/noexcept_benchmark
+      make
+      cd ..
+    displayName: Clang build
+  - script: |
+      ./build/noexcept_benchmark
+      ./build_no_throw/noexcept_benchmark
+    displayName: Benchmark results (both including and excluding `throw exception{}`)
+    
