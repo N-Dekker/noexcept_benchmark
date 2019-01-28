@@ -37,13 +37,13 @@ double LIBRARY_NAMESPACE::test_inc_and_dec()
     int value = 0;
 
     // The compiler cannot assume that this bool is always false, even though it is!
-    volatile bool volatile_bool = noexcept_benchmark::get_false();
+    volatile bool volatile_false = noexcept_benchmark::get_false();
 
     try
     {
       for (int i = 0; i < number_of_func_calls; ++i)
       {
-        const bool do_throw_exception = volatile_bool;
+        const bool do_throw_exception = volatile_false;
         ++value;
         func(do_throw_exception);
         --value;

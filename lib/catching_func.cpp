@@ -31,11 +31,11 @@ namespace
     try
     {
       // The compiler cannot assume that this bool is always false, even though it is!
-      volatile bool volatile_bool = noexcept_benchmark::get_false();
+      volatile bool volatile_false = noexcept_benchmark::get_false();
 
       if (--number_of_func_calls > 0)
       {
-        func(volatile_bool);
+        func(volatile_false);
         catching_recursive_func(number_of_func_calls);
       }
     }
