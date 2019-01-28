@@ -21,14 +21,6 @@ limitations under the License.
 
 namespace LIBRARY_NAMESPACE
 {
-  class NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT dummy_class
-  {
-  public:
-    dummy_class() OPTIONAL_EXCEPTION_SPECIFIER;
-    ~dummy_class();
-  };
-
-  
   dummy_class::dummy_class() OPTIONAL_EXCEPTION_SPECIFIER
   {
     noexcept_benchmark::throw_exception_if(noexcept_benchmark::get_false());

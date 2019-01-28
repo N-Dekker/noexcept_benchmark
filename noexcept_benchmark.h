@@ -23,14 +23,6 @@ limitations under the License.
 #include <exception>
 
 
-#ifdef _WIN32
-#  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT __declspec(dllimport)
-#  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT __declspec(dllexport)
-#else
-#  define NOEXCEPT_BENCHMARK_SHARED_LIB_IMPORT
-#  define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-#endif
-
 #ifdef SPECIFY_NOEXCEPT
 #  if SPECIFY_NOEXCEPT == 0
 #    define OPTIONAL_EXCEPTION_SPECIFIER
@@ -117,6 +109,18 @@ namespace noexcept_benchmark
   }
 
 }
+
+#define NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER noexcept
+#define NOEXCEPT_BENCHMARK_LIB_NAMESPACE noexcept_test
+#include "lib/lib.h"
+#undef NOEXCEPT_BENCHMARK_LIB_NAMESPACE
+#undef NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
+#define NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
+#define NOEXCEPT_BENCHMARK_LIB_NAMESPACE implicit_except_test
+#include "lib/lib.h"
+#undef NOEXCEPT_BENCHMARK_LIB_NAMESPACE
+#undef NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
+
 
 
 #endif
