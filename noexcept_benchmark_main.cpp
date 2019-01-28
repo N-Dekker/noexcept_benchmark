@@ -282,25 +282,6 @@ int main()
     }
   }
   {
-    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS> result(
-      "recursive function calls");
-
-    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
-    {
-      enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_CALLS };
-
-      update_test_result_and_print_durations(result, profile_func_calls(
-        []
-      {
-        noexcept_test::recursive_func(number_of_func_calls);
-      },
-        []
-      {
-        implicit_test::recursive_func(number_of_func_calls);
-      }));
-    }
-  }
-  {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS> result(
       "catching function calls");
 
@@ -310,25 +291,6 @@ int main()
       durations.duration_noexcept = noexcept_test::catching_func();
       durations.duration_implicit = implicit_test::catching_func();
       update_test_result_and_print_durations(result, durations);
-    }
-  }
-  {
-    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS> result(
-      "template recursion");
-
-    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
-    {
-      enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_RECURSIVE_FUNC_TEMPLATE_CALLS };
-
-      update_test_result_and_print_durations(result, profile_func_calls(
-        []
-      {
-        noexcept_test::recursive_func_template<number_of_func_calls>();
-      },
-        []
-      {
-        implicit_test::recursive_func_template<number_of_func_calls>();
-      }));
     }
   }
   {

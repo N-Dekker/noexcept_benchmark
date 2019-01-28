@@ -34,41 +34,4 @@ namespace NOEXCEPT_BENCHMARK_LIB_NAMESPACE
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func();
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding();
     NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve();
-
-    class NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT dummy_class
-    {
-    public:
-      dummy_class() NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
-      ~dummy_class();
-    };
-
-
-    inline void recursive_func(unsigned short number_of_func_calls) NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
-    {
-      if (--number_of_func_calls > 0)
-      {
-        dummy_class dummy1;
-        dummy_class dummy2;
-        recursive_func(number_of_func_calls);
-        dummy_class dummy3;
-        dummy_class dummy4;
-      }
-    }
-
-
-    template <unsigned number_of_func_calls>
-    void recursive_func_template() NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
-    {
-      dummy_class dummy1;
-      dummy_class dummy2;
-      recursive_func_template<number_of_func_calls - 1>();
-      dummy_class dummy3;
-      dummy_class dummy4;
-    }
-
-    template <>
-    inline void recursive_func_template<0>() NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
-    {
-    }
-
   }  // End of namespace noexcept_test
