@@ -248,7 +248,7 @@ int main()
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_inline_func();
-      durations.duration_implicit = implicit_except_test::test_inline_func();
+      durations.duration_implicit = implicit_test::test_inline_func();
       update_test_result_and_print_durations(result, durations);
     }
   }
@@ -276,7 +276,7 @@ int main()
 
         for (int i = 0; i < number_of_func_calls; ++i)
         {
-          implicit_except_test::exported_func(do_throw_exception);
+          implicit_test::exported_func(do_throw_exception);
         }
       }));
     }
@@ -296,7 +296,7 @@ int main()
       },
         []
       {
-        implicit_except_test::recursive_func(number_of_func_calls);
+        implicit_test::recursive_func(number_of_func_calls);
       }));
     }
   }
@@ -313,7 +313,7 @@ int main()
       },
         []
       {
-        implicit_except_test::catching_func();
+        implicit_test::catching_func();
       }));
     }
   }
@@ -332,7 +332,7 @@ int main()
       },
         []
       {
-        implicit_except_test::recursive_func_template<number_of_func_calls>();
+        implicit_test::recursive_func_template<number_of_func_calls>();
       }));
     }
   }
@@ -349,7 +349,7 @@ int main()
       },
         []
       {
-        implicit_except_test::test_inc_and_dec();
+        implicit_test::test_inc_and_dec();
       }));
     }
   }
@@ -361,7 +361,7 @@ int main()
     {
       durations_type durations;
       durations.duration_noexcept = noexcept_test::test_vector_reserve();
-      durations.duration_implicit = implicit_except_test::test_vector_reserve();
+      durations.duration_implicit = implicit_test::test_vector_reserve();
       update_test_result_and_print_durations(result, durations);
     }
   }

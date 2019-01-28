@@ -26,7 +26,7 @@ limitations under the License.
 #ifdef SPECIFY_NOEXCEPT
 #  if SPECIFY_NOEXCEPT == 0
 #    define OPTIONAL_EXCEPTION_SPECIFIER
-#    define LIBRARY_NAMESPACE implicit_except_test
+#    define LIBRARY_NAMESPACE implicit_test
 #  endif
 #  if SPECIFY_NOEXCEPT == 1
 #    define OPTIONAL_EXCEPTION_SPECIFIER noexcept
@@ -116,7 +116,7 @@ namespace noexcept_benchmark
 #undef NOEXCEPT_BENCHMARK_LIB_NAMESPACE
 #undef NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
 #define NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
-#define NOEXCEPT_BENCHMARK_LIB_NAMESPACE implicit_except_test
+#define NOEXCEPT_BENCHMARK_LIB_NAMESPACE implicit_test
 #include "lib/lib.h"
 #undef NOEXCEPT_BENCHMARK_LIB_NAMESPACE
 #undef NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
