@@ -56,13 +56,13 @@ target_compile_definitions(noexcept_lib PRIVATE
 )
 target_include_directories(noexcept_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(implicit_except_lib
+add_library(implicit_lib
   SHARED ${SHARED_LIB_SOURCE_FILES})
-target_compile_definitions(implicit_except_lib PRIVATE
+target_compile_definitions(implicit_lib PRIVATE
   ${NOEXCEPT_BENCHMARK_THROW_EXCEPTION_COMPILE_DEFINITION}
   SPECIFY_NOEXCEPT=0
 )
-target_include_directories(implicit_except_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(implicit_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${PROJECT_NAME}
   ${PROJECT_NAME}.h
@@ -73,5 +73,5 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME}
 	noexcept_lib
-	implicit_except_lib
+	implicit_lib
 	)
