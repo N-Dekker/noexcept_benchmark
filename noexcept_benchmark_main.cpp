@@ -318,6 +318,18 @@ int main()
     }
   }
   {
+    test_result<NOEXCEPT_BENCHMARK_STACK_UNWINDING_OBJECTS> result(
+      "stack unwinding array");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      durations_type durations;
+      durations.duration_noexcept = noexcept_lib::test_stack_unwinding_array();
+      durations.duration_implicit = implicit_lib::test_stack_unwinding_array();
+      update_test_result_and_print_durations(result, durations);
+    }
+  }
+  {
     test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result(
       "std::vector<my_string> reserve");
 
