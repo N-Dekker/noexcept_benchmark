@@ -20,6 +20,7 @@ limitations under the License.
 #include <cassert>
 #include <chrono>
 #include <ctime>
+#include <climits>
 #include <exception>
 
 
@@ -45,7 +46,7 @@ limitations under the License.
 
 #ifdef NDEBUG
 #  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS
-#    define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS 567890000
+#    define NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS (INT_MAX - 1)
 #  endif
 #  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS
 #    define NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS 98765432
