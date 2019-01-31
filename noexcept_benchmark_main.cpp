@@ -156,10 +156,10 @@ namespace
         << m_shortest_duration_implicit
         << column_gap
         << "(shortest durations)"
-        << "\nRatio sum of durations noexcept/implicit: "
-        << divide_by_positive(m_sum_of_durations_noexcept, m_sum_of_durations_implicit)
+        << std::setprecision(2)
         << "\nRatio sum of durations implicit/noexcept: "
         << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
+        << std::setprecision(output_precision)
         << ((m_number_of_times_noexcept_is_faster == number_of_iterations) ?
           "\nIn this case, 'noexcept' specifications always appear faster." : "")
         << ((m_number_of_times_implicit_is_faster == number_of_iterations) ?
@@ -307,7 +307,7 @@ int main()
   }
   {
     test_result<NOEXCEPT_BENCHMARK_STACK_UNWINDING_FUNC_CALLS> result(
-      "stack unwinding");
+      "recursive stack unwinding");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
