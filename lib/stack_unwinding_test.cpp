@@ -25,7 +25,7 @@ namespace
   {
     unsigned m_object_counter;
   public:
-    explicit object_class(unsigned& object_counter) OPTIONAL_EXCEPTION_SPECIFIER
+    explicit object_class(unsigned& object_counter)
       :
       m_object_counter(object_counter)
     {
