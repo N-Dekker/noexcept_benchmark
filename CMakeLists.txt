@@ -72,6 +72,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}
-	noexcept_lib
-	implicit_lib
-	)
+  noexcept_lib
+  implicit_lib
+)
