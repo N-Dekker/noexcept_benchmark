@@ -80,7 +80,7 @@ double LIB_NAME::test_stack_unwinding()
     {
       // Should never occur!
       std::cerr
-        << "Incomplete stack unwinding, possibly caused by an exception!"
+        << "Error: Incomplete stack unwinding, possibly caused by an exception!"
         << data.object_counter << std::endl;
     }
   });

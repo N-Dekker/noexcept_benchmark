@@ -41,7 +41,10 @@ namespace
     }
     catch (const std::exception&)
     {
-      std::cout << number_of_func_calls << std::endl;
+      // Should never occur!
+      std::cerr
+        << "Error: This code is unreachable!!! number_of_func_calls = " << number_of_func_calls
+        << std::endl;
     }
   }
 }
@@ -58,7 +61,8 @@ double LIB_NAME::catching_func()
     }
     catch (const std::exception&)
     {
-      std::cout << __FUNCTION__ << std::endl;
+      // Should never occur!
+      std::cerr << "Error: an exception caught in " __FUNCTION__ << std::endl;
     }
   });
 }

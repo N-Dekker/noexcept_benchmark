@@ -64,7 +64,8 @@ double LIB_NAME::test_stack_unwinding_array()
     }
     catch (const std::exception&)
     {
-      std::cerr << object_class::get_object_counter() << std::endl;
+      // Should never occur!
+      std::cerr << "Error! object_counter = " << object_class::get_object_counter() << std::endl;
     }
   });
 }
