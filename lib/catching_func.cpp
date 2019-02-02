@@ -62,7 +62,9 @@ double LIB_NAME::catching_func()
     catch (const std::exception&)
     {
       // Should never occur!
-      std::cerr << "Error: an exception caught in " __FUNCTION__ << std::endl;
+      std::cerr
+        << "Error: an exception caught in " << __FUNCTION__
+        << std::endl;
     }
   });
 }

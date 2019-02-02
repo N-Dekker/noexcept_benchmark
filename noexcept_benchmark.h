@@ -55,7 +55,7 @@ limitations under the License.
 #    define NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS 10000 // ten thousand
 #endif
 #  ifndef NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS
-#    define NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS 1000000000 // a billion
+#    define NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS 2147483647 // INT32_MAX (about two billion)
 #  endif
 #  ifndef NOEXCEPT_BENCHMARK_STACK_UNWINDING_FUNC_CALLS
 // Note: On Windows 10, x64, stack overflow occurred with N = 15000
