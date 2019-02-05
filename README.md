@@ -2,6 +2,8 @@
 
 Related to:
 
+[My lightning talk at C++ on Sea - noexcept considered harmfull???](https://nd.home.xs4all.nl/cpp/talks/NielsDekker-CppOnSea-Feb-2019-noexcept.pptx)
+
 [ITK forum - Regarding C++11 noexcept](https://discourse.itk.org/t/regarding-c-11-noexcept/1517)
 
 [Microsoft Developer Community - C++11 noexcept implementation still a performance loss with VS2017?](https://developercommunity.visualstudio.com/content/problem/425370/c11-noexcept-implementation-still-a-performance-lo.html)
