@@ -1,5 +1,7 @@
 # noexcept_benchmark
 
+Aims to estimate the runtime performance effects of adding a `noexcept` specifier.
+
 Related to:
 
 [My lightning talk at C++ on Sea - noexcept considered harmfull???](https://nd.home.xs4all.nl/cpp/talks/NielsDekker-CppOnSea-Feb-2019-noexcept.pptx)
