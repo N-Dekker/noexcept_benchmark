@@ -19,12 +19,15 @@ limitations under the License.
 #include <iostream>
 #include <ctime>
 
+using noexcept_benchmark::throw_exception_if;
+
 namespace
 {
-  void func(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
+  void f(bool b) OPTIONAL_EXCEPTION_SPECIFIER // noexcept or nothing!
   {
-    noexcept_benchmark::throw_exception_if(do_throw_exception);
+    throw_exception_if(b);
   }
+
 }
 
 
@@ -33,29 +36,20 @@ double LIB_NAME::test_inc_and_dec()
 {
   return noexcept_benchmark::profile_func_call([]
   {
-    const int number_of_func_calls = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS;
-    int value = 0;
-
-    // The compiler cannot assume that this bool is always false, even though it is!
-    volatile bool volatile_false = noexcept_benchmark::get_false();
-
+    int v{};
+    volatile bool my_volatile_false{ noexcept_benchmark::get_false() };
     try
     {
-      for (int i = 0; i < number_of_func_calls; ++i)
+      for (auto i = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS; i > 0; --i)
       {
-        const bool do_throw_exception = volatile_false;
-        ++value;
-        func(do_throw_exception);
-        --value;
+        const bool b{ my_volatile_false };
+        ++v;
+        f(b);  // b is false, so do not throw
+        --v;
       }
     }
-    catch (const std::exception&)
-    {
-    }
-    if (value != 0)
-    {
-      // Should never occur!
-      std::cerr << "Error: value = " << value << std::endl;
-    }
+    catch (const std::exception&) {}
+
+    if (v != 0) std::cerr << "Error: value = " << v << std::endl;
   });
 }
