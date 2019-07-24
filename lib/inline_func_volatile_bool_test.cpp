@@ -16,25 +16,25 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 
+using noexcept_benchmark::throw_exception_if;
+
 namespace
 {
-  inline void inline_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
+  void f(bool b) OPTIONAL_EXCEPTION_SPECIFIER // noexcept or nothing!
   {
-    noexcept_benchmark::throw_exception_if(do_throw_exception);
+    throw_exception_if(b);
   }
 }
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIB_NAME::test_inline_func()
+double LIB_NAME::test_inline_func_volatile_bool()
 {
-  enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
-
   return noexcept_benchmark::profile_func_call([]
   {
-    for (int i = 0; i < number_of_func_calls; ++i)
-    {
-      inline_func(false);
-    }
+    volatile bool b = noexcept_benchmark::get_false();
+
+    for (auto i = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS; i > 0; --i)
+      f(b);
   });
 }
