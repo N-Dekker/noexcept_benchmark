@@ -20,31 +20,23 @@ limitations under the License.
 
 namespace
 {
-  void func(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
+  void f(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
     noexcept_benchmark::throw_exception_if(do_throw_exception);
   }
 
 
-  void catching_recursive_func(unsigned short number_of_func_calls) OPTIONAL_EXCEPTION_SPECIFIER
+  // Profile recursive_func(10'000)
+  void recursive_func(std::uint16_t n, volatile bool b) OPTIONAL_EXCEPTION_SPECIFIER
   {
-    try
-    {
-      // The compiler cannot assume that this bool is always false, even though it is!
-      volatile bool volatile_false = noexcept_benchmark::get_false();
-
-      if (--number_of_func_calls > 0)
-      {
-        func(volatile_false);
-        catching_recursive_func(number_of_func_calls);
+    try {
+      if (--n > 0) {
+        f(b); // b is false, so f(b) never throws.
+        recursive_func(n, b);
       }
     }
-    catch (const std::exception&)
-    {
-      // Should never occur!
-      std::cerr
-        << "Error: This code is unreachable!!! number_of_func_calls = " << number_of_func_calls
-        << std::endl;
+    catch (const std::exception&) {
+      std::cerr << "Should never occur! n = " << n << std::endl;
     }
   }
 }
@@ -55,16 +47,6 @@ double LIB_NAME::catching_func()
 {
   return noexcept_benchmark::profile_func_call([]
   {
-    try
-    {
-      catching_recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS);
-    }
-    catch (const std::exception&)
-    {
-      // Should never occur!
-      std::cerr
-        << "Error: an exception caught in " << __FUNCTION__
-        << std::endl;
-    }
+    recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS, noexcept_benchmark::get_false());
   });
 }
