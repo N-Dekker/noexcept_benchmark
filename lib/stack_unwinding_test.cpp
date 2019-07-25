@@ -21,32 +21,26 @@ limitations under the License.
 
 namespace
 {
-  struct object_class
-  {
+  struct ref_holder_type {
     std::uint16_t & ref;
+    ~ref_holder_type() { --ref; }
+  };
 
-    ~object_class()
+  struct recursion_test {
+    std::uint16_t num_func_calls_to_do{ NOEXCEPT_BENCHMARK_STACK_UNWINDING_FUNC_CALLS };
+    std::uint16_t num_objects_on_stack{ 0 };
+    volatile bool b{ noexcept_benchmark::get_false() };
+
+    void recursive_mem_func() OPTIONAL_EXCEPTION_SPECIFIER
     {
-      --ref;
+      if (--num_func_calls_to_do > 0) {
+        noexcept_benchmark::throw_exception_if(b);
+        ref_holder_type ref_holder_object{ ++num_objects_on_stack };
+        this->recursive_mem_func();
+      }
     }
   };
 
-  struct recursion_data
-  {
-    int number_of_func_calls_to_do;
-    volatile bool volatile_false;
-    std::uint16_t object_counter;
-  };
-
-  void recursive_func(recursion_data& data) OPTIONAL_EXCEPTION_SPECIFIER
-  {
-    if (--data.number_of_func_calls_to_do > 0)
-    {
-      noexcept_benchmark::throw_exception_if(data.volatile_false);
-      object_class stack_object{ ++data.object_counter };
-      recursive_func(data);
-    }
-  }
 }
 
 
@@ -55,22 +49,17 @@ double LIB_NAME::test_stack_unwinding()
 {
   return noexcept_benchmark::profile_func_call([]
   {
-    recursion_data data
-    {
-      NOEXCEPT_BENCHMARK_STACK_UNWINDING_FUNC_CALLS,
-      noexcept_benchmark::get_false(),
-      0
-    };
+    recursion_test test;
 
     try
     {
-      recursive_func(data);
+      test.recursive_mem_func();
     }
     catch (const std::exception&) { }
 
-    if (data.object_counter != 0)
+    if (test.num_objects_on_stack != 0)
     {
-      std::cerr << "Should never occur! n = " << data.object_counter << '\n';
+      std::cerr << "Should never occur! num_objects_on_stack = " << test.num_objects_on_stack << '\n';
     }
   });
 }
