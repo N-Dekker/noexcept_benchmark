@@ -96,7 +96,7 @@ namespace noexcept_benchmark
   inline bool get_false()
   {
     // The compiler may not assume that std::time returns non-zero,
-    // but in practie, it always does!
+    // but in practice, it always does!
     return std::time(nullptr) == 0;
   }
 

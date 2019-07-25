@@ -27,7 +27,6 @@ namespace
   {
     throw_exception_if(b);
   }
-
 }
 
 
@@ -37,19 +36,18 @@ double LIB_NAME::test_inc_and_dec()
   return noexcept_benchmark::profile_func_call([]
   {
     int v{};
-    volatile bool my_volatile_false{ noexcept_benchmark::get_false() };
-    try
-    {
-      for (auto i = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS; i > 0; --i)
-      {
-        const bool b{ my_volatile_false };
-        ++v;
-        f(b);  // b is false, so do not throw
-        --v;
-      }
-    }
-    catch (const std::exception&) {}
+    volatile bool my_volatile_false { noexcept_benchmark::get_false() };
+    try {
+        for ( auto i = NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS; i > 0; --i )
+        {
+            const bool b{ my_volatile_false };
+            ++v;
+            f(b);  // b is false, so f(b) never throws.
+            --v;
+        }
+    } catch (const std::exception&) { }
 
-    if (v != 0) std::cerr << "Error: value = " << v << '\n';
+    if ( v != 0 )
+        std::cerr << "Should never occur! v = " << v << '\n';
   });
 }
