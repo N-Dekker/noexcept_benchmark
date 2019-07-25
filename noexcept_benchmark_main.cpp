@@ -242,13 +242,25 @@ int main()
     << std::endl;
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(
-      "inline function calls");
+      "inline function calls (constexpr false)");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
-      durations.duration_noexcept = noexcept_lib::test_inline_func();
-      durations.duration_implicit = implicit_lib::test_inline_func();
+      durations.duration_noexcept = noexcept_lib::test_inline_func_constexpr_false();
+      durations.duration_implicit = implicit_lib::test_inline_func_constexpr_false();
+      update_test_result_and_print_durations(result, durations);
+    }
+  }
+  {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(
+      "inline function calls (volatile bool)");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      durations_type durations;
+      durations.duration_noexcept = noexcept_lib::test_inline_func_volatile_bool();
+      durations.duration_implicit = implicit_lib::test_inline_func_volatile_bool();
       update_test_result_and_print_durations(result, durations);
     }
   }

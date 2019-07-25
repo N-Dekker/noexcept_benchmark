@@ -81,11 +81,11 @@ limitations under the License.
 
 namespace noexcept_benchmark
 {
-  inline void throw_exception_if(const bool do_throw_exception)
+  inline
+  void throw_exception_if(bool b)
   {
-    if (do_throw_exception)
+    if (b)
     {
-      assert(!"This function should only be called with do_throw_exception = false!");
 #if NOEXCEPT_BENCHMARK_THROW_EXCEPTION
       throw std::exception{};
 #endif
@@ -96,7 +96,7 @@ namespace noexcept_benchmark
   inline bool get_false()
   {
     // The compiler may not assume that std::time returns non-zero,
-    // but in practie, it always does!
+    // but in practice, it always does!
     return std::time(nullptr) == 0;
   }
 

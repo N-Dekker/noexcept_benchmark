@@ -16,37 +16,25 @@ limitations under the License.
 
 #include "noexcept_benchmark.h"
 
-#include <iostream>
+using noexcept_benchmark::throw_exception_if;
 
 namespace
 {
-  void f(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
+  void f(bool b) OPTIONAL_EXCEPTION_SPECIFIER // noexcept or nothing!
   {
-    noexcept_benchmark::throw_exception_if(do_throw_exception);
-  }
-
-
-  // Profile recursive_func(10'000)
-  void recursive_func(std::uint16_t n, volatile bool b) OPTIONAL_EXCEPTION_SPECIFIER
-  {
-    try {
-      if (--n > 0) {
-        f(b); // b is false, so f(b) never throws.
-        recursive_func(n, b);
-      }
-    }
-    catch (const std::exception&) {
-      std::cerr << "Should never occur! n = " << n << '\n';
-    }
+    throw_exception_if(b);
   }
 }
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIB_NAME::catching_func()
+double LIB_NAME::test_inline_func_constexpr_false()
 {
   return noexcept_benchmark::profile_func_call([]
   {
-    recursive_func(NOEXCEPT_BENCHMARK_NUMBER_OF_CATCHING_RECURSIVE_FUNC_CALLS, noexcept_benchmark::get_false());
+    constexpr bool b{ false };
+
+    for (auto i = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS; i > 0; --i)
+      f(b);
   });
 }
