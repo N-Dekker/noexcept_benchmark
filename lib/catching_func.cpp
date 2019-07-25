@@ -36,7 +36,7 @@ namespace
       }
     }
     catch (const std::exception&) {
-      std::cerr << "Should never occur! n = " << n << std::endl;
+      std::cerr << "Should never occur! n = " << n << '\n';
     }
   }
 }

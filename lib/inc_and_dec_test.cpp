@@ -50,6 +50,6 @@ double LIB_NAME::test_inc_and_dec()
     }
     catch (const std::exception&) {}
 
-    if (v != 0) std::cerr << "Error: value = " << v << std::endl;
+    if (v != 0) std::cerr << "Error: value = " << v << '\n';
   });
 }
