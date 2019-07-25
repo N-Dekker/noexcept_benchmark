@@ -21,20 +21,13 @@ limitations under the License.
 
 namespace
 {
-  class object_class
+  struct object_class
   {
-    unsigned m_object_counter;
-  public:
-    explicit object_class(unsigned& object_counter)
-      :
-      m_object_counter(object_counter)
-    {
-      ++m_object_counter;
-    }
+    std::uint16_t & ref;
 
     ~object_class()
     {
-      --m_object_counter;
+      --ref;
     }
   };
 
@@ -42,7 +35,7 @@ namespace
   {
     int number_of_func_calls_to_do;
     volatile bool volatile_false;
-    unsigned object_counter;
+    std::uint16_t object_counter;
   };
 
   void recursive_func(recursion_data& data) OPTIONAL_EXCEPTION_SPECIFIER
@@ -50,7 +43,7 @@ namespace
     if (--data.number_of_func_calls_to_do > 0)
     {
       noexcept_benchmark::throw_exception_if(data.volatile_false);
-      object_class stack_object(data.object_counter);
+      object_class stack_object{ ++data.object_counter };
       recursive_func(data);
     }
   }
@@ -73,15 +66,11 @@ double LIB_NAME::test_stack_unwinding()
     {
       recursive_func(data);
     }
-    catch (const std::exception&)
-    {
-    }
+    catch (const std::exception&) { }
+
     if (data.object_counter != 0)
     {
-      // Should never occur!
-      std::cerr
-        << "Error: Incomplete stack unwinding, possibly caused by an exception!"
-        << data.object_counter << '\n';
+      std::cerr << "Should never occur! n = " << data.object_counter << '\n';
     }
   });
 }
