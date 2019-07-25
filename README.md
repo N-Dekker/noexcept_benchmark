@@ -15,3 +15,5 @@ Related to:
 [Scott Meyers - Declare functions noexcept whenever possible?](https://scottmeyers.blogspot.com/2014/03/declare-functions-noexcept-whenever.html)
 
 [Stack Overflow - noexcept, stack unwinding and performance](https://stackoverflow.com/questions/26079903/noexcept-stack-unwinding-and-performance)
+
+[Dutch C++ Meetup](https://www.meetup.com/The-Dutch-Cpp-Group/events/262785773/)
