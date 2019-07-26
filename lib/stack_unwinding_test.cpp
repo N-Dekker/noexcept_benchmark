@@ -23,7 +23,7 @@ namespace
 {
   class object_class
   {
-    unsigned m_object_counter;
+    unsigned& m_object_counter;
   public:
     explicit object_class(unsigned& object_counter)
       :
