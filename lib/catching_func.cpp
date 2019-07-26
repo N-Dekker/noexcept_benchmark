@@ -44,7 +44,7 @@ namespace
       // Should never occur!
       std::cerr
         << "Error: This code is unreachable!!! number_of_func_calls = " << number_of_func_calls
-        << std::endl;
+        << '\n';
     }
   }
 }
@@ -64,7 +64,7 @@ double LIB_NAME::catching_func()
       // Should never occur!
       std::cerr
         << "Error: an exception caught in " << __FUNCTION__
-        << std::endl;
+        << '\n';
     }
   });
 }

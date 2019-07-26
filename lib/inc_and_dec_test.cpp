@@ -55,7 +55,7 @@ double LIB_NAME::test_inc_and_dec()
     if (value != 0)
     {
       // Should never occur!
-      std::cerr << "Error: value = " << value << std::endl;
+      std::cerr << "Error: value = " << value << '\n';
     }
   });
 }
