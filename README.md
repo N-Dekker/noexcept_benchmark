@@ -8,7 +8,7 @@ Related to:
 
 [Powerpoint of my lightning talk at C++ on Sea](https://nd.home.xs4all.nl/cpp/talks/NielsDekker-CppOnSea-Feb-2019-noexcept.pptx)
 
-(I did a extensive more extensive talk on this topic at [Dutch C++ Meetup, July 26, 2019](https://www.meetup.com/The-Dutch-Cpp-Group/events/262785773/))
+(I did a more extensive talk on this topic at [Dutch C++ Meetup, July 26, 2019](https://www.meetup.com/The-Dutch-Cpp-Group/events/262785773/))
 
 [ITK forum - Regarding C++11 noexcept](https://discourse.itk.org/t/regarding-c-11-noexcept/1517)
 
@@ -19,3 +19,5 @@ Related to:
 [Scott Meyers - Declare functions noexcept whenever possible?](https://scottmeyers.blogspot.com/2014/03/declare-functions-noexcept-whenever.html)
 
 [Stack Overflow - noexcept, stack unwinding and performance](https://stackoverflow.com/questions/26079903/noexcept-stack-unwinding-and-performance)
+
+[Andrzej's C++ blog - noexcept — what for?](https://akrzemi1.wordpress.com/2014/04/24/noexcept-what-for/)
