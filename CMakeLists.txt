@@ -17,9 +17,9 @@
 #=========================================================================
 
 # Note: VERSION 3.13 would be preferable, as it has IPO (LTCG) for VS.
-# However, Travis CI (Ubuntu 4.8.4-2ubuntu1~14.04.3) still runs CMake 3.9.2,
-# at the moment (20 January 2019).
-cmake_minimum_required( VERSION 3.9.2 )
+# However, Travis CI (Ubuntu 16.04.6 LTS) still runs CMake 3.12.4,
+# at the moment (8 May 2020).
+cmake_minimum_required( VERSION 3.12.4 )
 
 project (noexcept_benchmark)
 
