@@ -135,3 +135,25 @@ jobs:
       ./build/noexcept_benchmark
       ./build_no_throw/noexcept_benchmark
     displayName: Benchmark results (both including and excluding `throw exception{}`)
+
+
+- job: macOS1015
+  pool:
+    vmImage: 'macOS-10.15'
+  steps:
+  - script: |
+      mkdir build
+      cd build
+      cmake ..
+      make
+      cd ..
+      mkdir build_no_throw
+      cd build_no_throw
+      cmake -D NOEXCEPT_BENCHMARK_THROW_EXCEPTION:BOOL=OFF ..
+      make
+      cd ..
+    displayName: Clang build macOS-10.15
+  - script: |
+      ./build/noexcept_benchmark
+      ./build_no_throw/noexcept_benchmark
+    displayName: Benchmark results (both including and excluding `throw exception{}`)
