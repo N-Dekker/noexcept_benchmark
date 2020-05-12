@@ -15,7 +15,11 @@ limitations under the License.
 */
 
 #ifdef _WIN32
-#  ifdef _WINDLL
+// Note: It appeared insufficient to do #ifdef _WINDLL because the Visual Studio
+// integrated CMake version of VS2019 does not define this macro, see bug report
+// "Visual Studio integrated CMake should define _WINDLL for a shared library", 12 May 2020,
+// https://developercommunity.visualstudio.com/content/problem/1027499/visual-studio-integrated-cmake-should-define-windl.html
+#  if defined(noexcept_lib_EXPORTS) || defined(implicit_lib_EXPORTS)
 #    define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT __declspec(dllexport)
 #  else
 #    define NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT __declspec(dllimport)
