@@ -32,11 +32,25 @@ limitations under the License.
 
 namespace NOEXCEPT_BENCHMARK_LIB_NAME
 {
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void exported_func(bool do_throw_exception) NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double catching_func();
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inc_and_dec();
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func();
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding();
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding_array();
-    NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve();
+  class NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT exported_class
+  {
+  private:
+    int m_data{};
+
+  public:
+    inline int inline_get_data() const NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER
+    {
+      return m_data;
+    }
+
+    int non_inline_get_data() const NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
+  };
+
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void exported_func(bool do_throw_exception) NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double catching_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inc_and_dec();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding_array();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve();
 }

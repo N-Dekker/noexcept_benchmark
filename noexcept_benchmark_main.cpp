@@ -253,6 +253,87 @@ int main()
     }
   }
   {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_CLASS_MEMBER_FUNC_CALLS> result(
+      "calls to an inline member function of an exported class");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_CLASS_MEMBER_FUNC_CALLS
+      };
+
+      update_test_result_and_print_durations(result, profile_func_calls(
+        []
+      {
+        noexcept_lib::exported_class obj{};
+        int result{};
+
+        for (int i = 0; i < number_of_func_calls; ++i)
+        {
+          result += obj.inline_get_data();
+        }
+        if (result != 0)
+        {
+          std::cerr << "Error: result = " << result << '\n';
+        }
+      },
+        []
+      {
+        implicit_lib::exported_class obj{};
+        int result{};
+
+        for (int i = 0; i < number_of_func_calls; ++i)
+        {
+          result += obj.inline_get_data();
+        }
+        if (result != 0)
+        {
+          std::cerr << "Error: result = " << result << '\n';
+        }
+      }));
+    }
+  }
+  {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_CLASS_MEMBER_FUNC_CALLS> result(
+      "calls to a non-inline member function of an exported class");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      enum {
+        number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_CLASS_MEMBER_FUNC_CALLS
+      };
+
+      update_test_result_and_print_durations(result, profile_func_calls(
+        []
+      {
+        noexcept_lib::exported_class obj{};
+        int result{};
+
+        for (int i = 0; i < number_of_func_calls; ++i)
+        {
+          result += obj.non_inline_get_data();
+        }
+        if (result != 0)
+        {
+          std::cerr << "Error: result = " << result << '\n';
+        }
+      },
+        []
+      {
+        implicit_lib::exported_class obj{};
+        int result{};
+
+        for (int i = 0; i < number_of_func_calls; ++i)
+        {
+          result += obj.non_inline_get_data();
+        }
+        if (result != 0)
+        {
+          std::cerr << "Error: result = " << result << '\n';
+        }
+      }));
+    }
+  }
+  {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_EXPORTED_FUNC_CALLS> result(
       "exported library function calls");
 
