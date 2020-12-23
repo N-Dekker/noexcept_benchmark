@@ -73,9 +73,9 @@ jobs:
       .\build64_no_throw\Release\noexcept_benchmark.exe
     displayName: $(Agent.JobName) results 64-bit (both including and excluding `throw exception{}`)
 
-- job: Ubuntu1604
+- job: Ubuntu1804
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
   - script: |
       mkdir build
@@ -94,9 +94,9 @@ jobs:
       ./build_no_throw/noexcept_benchmark
     displayName: $(Agent.JobName) results (both including and excluding `throw exception{}`)
 
-- job: Ubuntu1804
+- job: Ubuntu2004
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-20.04'
   steps:
   - script: |
       mkdir build
