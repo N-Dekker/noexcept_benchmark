@@ -17,7 +17,6 @@ limitations under the License.
 #include "noexcept_benchmark.h"
 
 #include <iostream>
-#include <ctime>
 
 namespace
 {
