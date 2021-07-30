@@ -49,7 +49,8 @@ namespace NOEXCEPT_BENCHMARK_LIB_NAME
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT void exported_func(bool do_throw_exception) NOEXCEPT_BENCHMARK_EXCEPTION_SPECIFIER;
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double catching_func();
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inc_and_dec();
-  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func_literal_false();
+  NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_inline_func_volatile_false();
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding();
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_stack_unwinding_array();
   NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT double test_vector_reserve();

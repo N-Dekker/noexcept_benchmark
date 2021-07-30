@@ -246,13 +246,25 @@ int main()
     << std::endl;
   {
     test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(
-      "inline function calls");
+      "inline function calls, passing literal `false` as argument");
 
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
-      durations.duration_noexcept = noexcept_lib::test_inline_func();
-      durations.duration_implicit = implicit_lib::test_inline_func();
+      durations.duration_noexcept = noexcept_lib::test_inline_func_literal_false();
+      durations.duration_implicit = implicit_lib::test_inline_func_literal_false();
+      update_test_result_and_print_durations(result, durations);
+    }
+  }
+  {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS> result(
+      "inline function calls, passing a volatile false argument");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      durations_type durations;
+      durations.duration_noexcept = noexcept_lib::test_inline_func_volatile_false();
+      durations.duration_implicit = implicit_lib::test_inline_func_volatile_false();
       update_test_result_and_print_durations(result, durations);
     }
   }
