@@ -410,18 +410,6 @@ int main()
       update_test_result_and_print_durations(result, durations);
     }
   }
-  {
-    test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result(
-      "std::vector<my_string> reserve");
-
-    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
-    {
-      durations_type durations;
-      durations.duration_noexcept = noexcept_lib::test_vector_reserve();
-      durations.duration_implicit = implicit_lib::test_vector_reserve();
-      update_test_result_and_print_durations(result, durations);
-    }
-  }
 
   std::cout << std::string(80, '=') << std::endl;
   return 0;
