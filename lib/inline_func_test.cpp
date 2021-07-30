@@ -26,7 +26,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIB_NAME::test_inline_func()
+double LIB_NAME::test_inline_func_literal_false()
 {
   enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
 
@@ -37,4 +37,21 @@ double LIB_NAME::test_inline_func()
       inline_func(false);
     }
   });
+}
+
+
+NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
+double LIB_NAME::test_inline_func_volatile_false()
+{
+  enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_INLINE_FUNC_CALLS };
+
+  return noexcept_benchmark::profile_func_call([]
+    {
+      volatile bool volatile_false{ false };
+
+      for (int i = 0; i < number_of_func_calls; ++i)
+      {
+        inline_func(volatile_false);
+      }
+    });
 }
