@@ -85,13 +85,24 @@ limitations under the License.
 
 namespace noexcept_benchmark
 {
+  // Make `throw_exception_if(bool)` slightly more realistic, as C++ users
+  // typically throw an exception that is _derived_ from `std::exception`.
+  class exception_that_should_never_be_thrown : public std::exception
+  {
+    const char* what() const noexcept override
+    {
+      return "noexcept_benchmark exception, never ever intended to be thrown!";
+    }
+  };
+
+
   inline void throw_exception_if(const bool do_throw_exception)
   {
     if (do_throw_exception)
     {
       assert(!"This function should only be called with do_throw_exception = false!");
 #if NOEXCEPT_BENCHMARK_THROW_EXCEPTION
-      throw std::exception{};
+      throw exception_that_should_never_be_thrown{};
 #endif
     }
   }
