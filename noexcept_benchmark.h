@@ -68,6 +68,14 @@ limitations under the License.
 // Note: On Windows 10, x64, stack overflow occurred with N = 1280000
 #    define NOEXCEPT_BENCHMARK_STACK_UNWINDING_OBJECTS 1000000 // a million
 #  endif
+#  ifndef NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE
+#    ifdef _MSC_VER
+// This test appears to take much more time with MSVC (VS2017, VS2019), so do less iterations than with the other compilers.
+#      define NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE 200000000 // two hundred million
+#    else
+#      define NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE 2147483647 // INT32_MAX (about two billion)
+#    endif
+#  endif
 #  ifndef NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE
 #    define NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE 10000000 // ten million
 #  endif
@@ -79,6 +87,7 @@ limitations under the License.
 #  define NOEXCEPT_BENCHMARK_INC_AND_DEC_FUNC_CALLS 42
 #  define NOEXCEPT_BENCHMARK_STACK_UNWINDING_FUNC_CALLS 42
 #  define NOEXCEPT_BENCHMARK_STACK_UNWINDING_OBJECTS 42
+#  define NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE 42
 #  define NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE 42
 #endif
 
