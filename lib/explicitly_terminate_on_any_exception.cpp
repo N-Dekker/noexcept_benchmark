@@ -33,7 +33,7 @@ namespace
 
 
 NOEXCEPT_BENCHMARK_SHARED_LIB_EXPORT
-double LIB_NAME::test_explicitly_terminate_on_exception()
+double LIB_NAME::test_explicitly_terminate_on_any_exception()
 {
   enum { number_of_func_calls = NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE };
 

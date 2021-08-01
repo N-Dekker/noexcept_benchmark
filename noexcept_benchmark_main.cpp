@@ -433,8 +433,20 @@ int main()
     for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
     {
       durations_type durations;
-      durations.duration_noexcept = noexcept_lib::test_explicitly_terminate_on_exception();
-      durations.duration_implicit = implicit_lib::test_explicitly_terminate_on_exception();
+      durations.duration_noexcept = noexcept_lib::test_explicitly_terminate_on_any_exception();
+      durations.duration_implicit = implicit_lib::test_explicitly_terminate_on_any_exception();
+      update_test_result_and_print_durations(result, durations);
+    }
+  }
+  {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE> result(
+      "explicitly terminate on std::exception");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      durations_type durations;
+      durations.duration_noexcept = noexcept_lib::test_explicitly_terminate_on_std_exception();
+      durations.duration_implicit = implicit_lib::test_explicitly_terminate_on_std_exception();
       update_test_result_and_print_durations(result, durations);
     }
   }
