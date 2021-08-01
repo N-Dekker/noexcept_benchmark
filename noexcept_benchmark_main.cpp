@@ -160,6 +160,10 @@ namespace
         << "\nRatio sum of durations implicit/noexcept: "
         << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
         << std::setprecision(output_precision)
+        << ((m_number_of_times_noexcept_is_faster > m_number_of_times_implicit_is_faster) ?
+          " (noexcept faster in " + std::to_string(m_number_of_times_noexcept_is_faster) + " iterations)" : "")
+        << ((m_number_of_times_noexcept_is_faster < m_number_of_times_implicit_is_faster) ?
+          " (implicit faster in " + std::to_string(m_number_of_times_implicit_is_faster) + " iterations)" : "")
         << ((m_number_of_times_noexcept_is_faster == number_of_iterations) ?
           "\nIn this case, 'noexcept' specifications always appear faster." : "")
         << ((m_number_of_times_implicit_is_faster == number_of_iterations) ?
