@@ -18,7 +18,7 @@ limitations under the License.
 
 namespace
 {
-  inline void inline_func(bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
+  inline void inline_func(const bool do_throw_exception) OPTIONAL_EXCEPTION_SPECIFIER
   {
     noexcept_benchmark::throw_exception_if(do_throw_exception);
   }
