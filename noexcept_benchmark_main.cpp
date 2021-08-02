@@ -451,6 +451,18 @@ int main()
     }
   }
   {
+    test_result<NOEXCEPT_BENCHMARK_NUMBER_OF_FUNC_CALLS_EXPLICITLY_TERMINATE> result(
+      "explicitly terminate versus noexcept");
+
+    for (int iteration_number = 0; iteration_number < number_of_iterations; ++iteration_number)
+    {
+      durations_type durations;
+      durations.duration_noexcept = noexcept_lib::test_explicitly_terminate_versus_noexcept();
+      durations.duration_implicit = implicit_lib::test_explicitly_terminate_versus_noexcept();
+      update_test_result_and_print_durations(result, durations);
+    }
+  }
+  {
     test_result<NOEXCEPT_BENCHMARK_INITIAL_VECTOR_SIZE> result(
       "std::vector<my_string> reserve");
 
