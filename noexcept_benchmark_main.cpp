@@ -19,6 +19,7 @@ limitations under the License.
 #include <algorithm>
 #include <chrono>
 #include <climits>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -133,6 +134,10 @@ namespace
     {
       const std::string dashes(output_precision + 2, '-');
 
+      const auto mean_sum_of_durations = (m_sum_of_durations_implicit + m_sum_of_durations_noexcept) / 2.0;
+      const auto relative_difference = (mean_sum_of_durations > 0.0) ? std::fabs(m_sum_of_durations_implicit - m_sum_of_durations_noexcept) / mean_sum_of_durations : 0.0;
+      const auto sign = (m_sum_of_durations_noexcept < m_sum_of_durations_implicit) ? "+" : ((m_sum_of_durations_implicit < m_sum_of_durations_noexcept) ? "-" : "");
+
       std::cout
         << '\n'
         << indent
@@ -159,6 +164,11 @@ namespace
         << std::setprecision(2)
         << "\nRatio sum of durations implicit/noexcept: "
         << divide_by_positive(m_sum_of_durations_implicit, m_sum_of_durations_noexcept)
+        << std::setprecision(0)
+        << "; relative difference: "
+        << sign
+        << (100.0 * relative_difference)
+        << '%'
         << std::setprecision(output_precision)
         << ((m_number_of_times_noexcept_is_faster > m_number_of_times_implicit_is_faster) ?
           " (noexcept faster in " + std::to_string(m_number_of_times_noexcept_is_faster) + " iterations)" : "")
