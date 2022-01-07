@@ -21,3 +21,5 @@ Related to:
 [Stack Overflow - noexcept, stack unwinding and performance](https://stackoverflow.com/questions/26079903/noexcept-stack-unwinding-and-performance)
 
 [Andrzej's C++ blog - noexcept — what for?](https://akrzemi1.wordpress.com/2014/04/24/noexcept-what-for/)
+
+[John Lakos, Vittorio Romeo, Rostislav Khlebnikov, Alisdair Meredith - Embracing Modern C++ Safely](https://emcpps.com) section 3.1 "The noexcept Function Specification"
